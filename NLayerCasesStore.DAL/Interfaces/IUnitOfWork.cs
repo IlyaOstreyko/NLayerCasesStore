@@ -11,7 +11,7 @@ namespace NLayerCasesStore.DAL.Interfaces
     {
         IRepository<Basket> Baskets { get; }
         IRepository<Order> Orders { get; }
-        IRepository<Admin> Admins { get; }
+        //IRepository<Admin> Admins { get; }
         IRepository<User> Users { get; }
         IRepository<Case> Cases { get; }
         void Save();
