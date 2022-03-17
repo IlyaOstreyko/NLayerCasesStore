@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NLayerCasesStore.DAL.Interfaces
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork
     {
         IRepository<Basket> Baskets { get; }
         IRepository<Order> Orders { get; }

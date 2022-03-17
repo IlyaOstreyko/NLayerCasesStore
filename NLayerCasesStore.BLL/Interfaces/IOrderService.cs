@@ -12,6 +12,5 @@ namespace NLayerCasesStore.BLL.Interfaces
         void MakeOrder(OrderDTO orderDto);
         CaseDTO GetCase(int? id);
         IEnumerable<CaseDTO> GetCase();
-        void Dispose();
     }
 }

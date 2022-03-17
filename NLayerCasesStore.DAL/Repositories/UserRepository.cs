@@ -12,41 +12,41 @@ namespace NLayerCasesStore.DAL.Repositories
 {
     internal class UserRepository : IRepository<User>
     {
-        private CasesStoreContext db;
+        private CasesStoreContext _casesStoreContext;
 
-        public UserRepository(CasesStoreContext context)
+        public UserRepository(CasesStoreContext casesStoreContext)
         {
-            this.db = context;
+            _casesStoreContext = casesStoreContext;
         }
 
         public IEnumerable<User> GetAll()
         {
-            return db.Users.Include(o => o.Orders);
+            return _casesStoreContext.Users.Include(o => o.Orders);
         }
 
         public User Get(int id)
         {
-            return db.Users.Find(id);
+            return _casesStoreContext.Users.Find(id);
         }
 
         public void Create(User user)
         {
-            db.Users.Add(user);
+            _casesStoreContext.Users.Add(user);
         }
 
         public void Update(User user)
         {
-            db.Entry(user).State = EntityState.Modified;
+            _casesStoreContext.Entry(user).State = EntityState.Modified;
         }
         public IEnumerable<User> Find(Func<User, Boolean> predicate)
         {
-            return db.Users.Where(predicate).ToList();
+            return _casesStoreContext.Users.Where(predicate).ToList();
         }
         public void Delete(int id)
         {
-            User user = db.Users.Find(id);
+            User user = _casesStoreContext.Users.Find(id);
             if (user != null)
-                db.Users.Remove(user);
+                _casesStoreContext.Users.Remove(user);
         }
     }
 }

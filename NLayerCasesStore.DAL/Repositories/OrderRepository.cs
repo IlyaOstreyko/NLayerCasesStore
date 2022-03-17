@@ -12,41 +12,41 @@ namespace NLayerCasesStore.DAL.Repositories
 {
     public class OrderRepository : IRepository<Order>
     {
-        private CasesStoreContext db;
+        private CasesStoreContext _casesStoreContext;
 
-        public OrderRepository(CasesStoreContext context)
+        public OrderRepository(CasesStoreContext casesStoreContext)
         {
-            this.db = context;
+            _casesStoreContext = casesStoreContext;
         }
 
         public IEnumerable<Order> GetAll()
         {
-            return db.Orders.Include(o => o.Cases);
+            return _casesStoreContext.Orders.Include(o => o.Cases);
         }
 
         public Order Get(int id)
         {
-            return db.Orders.Find(id);
+            return _casesStoreContext.Orders.Find(id);
         }
 
         public void Create(Order order)
         {
-            db.Orders.Add(order);
+            _casesStoreContext.Orders.Add(order);
         }
 
         public void Update(Order order)
         {
-            db.Entry(order).State = EntityState.Modified;
+            _casesStoreContext.Entry(order).State = EntityState.Modified;
         }
         public IEnumerable<Order> Find(Func<Order, Boolean> predicate)
         {
-            return db.Orders.Include(o => o.Cases).Where(predicate).ToList();
+            return _casesStoreContext.Orders.Include(o => o.Cases).Where(predicate).ToList();
         }
         public void Delete(int id)
         {
-            Order order = db.Orders.Find(id);
+            Order order = _casesStoreContext.Orders.Find(id);
             if (order != null)
-                db.Orders.Remove(order);
+                _casesStoreContext.Orders.Remove(order);
         }
     }
 }

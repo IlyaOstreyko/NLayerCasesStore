@@ -12,41 +12,41 @@ namespace NLayerCasesStore.DAL.Repositories
 {
     public class BasketRepository : IRepository<Basket>
     {
-        private CasesStoreContext db;
+        private CasesStoreContext _casesStoreContext;
 
-        public BasketRepository(CasesStoreContext context)
+        public BasketRepository(CasesStoreContext casesStoreContext)
         {
-            this.db = context;
+            _casesStoreContext = casesStoreContext;
         }
 
         public IEnumerable<Basket> GetAll()
         {
-            return db.Baskets.Include(o => o.Cases);
+            return _casesStoreContext.Baskets.Include(o => o.Cases);
         }
 
         public Basket Get(int id)
         {
-            return db.Baskets.Find(id);
+            return _casesStoreContext.Baskets.Find(id);
         }
 
         public void Create(Basket itembasket)
         {
-            db.Baskets.Add(itembasket);
+            _casesStoreContext.Baskets.Add(itembasket);
         }
 
         public void Update(Basket itembasket)
         {
-            db.Entry(itembasket).State = EntityState.Modified;
+            _casesStoreContext.Entry(itembasket).State = EntityState.Modified;
         }
         public IEnumerable<Basket> Find(Func<Basket, Boolean> predicate)
         {
-            return db.Baskets.Where(predicate).ToList();
+            return _casesStoreContext.Baskets.Where(predicate).ToList();
         }
         public void Delete(int id)
         {
-            Basket itembasket = db.Baskets.Find(id);
+            Basket itembasket = _casesStoreContext.Baskets.Find(id);
             if (itembasket != null)
-                db.Baskets.Remove(itembasket);
+                _casesStoreContext.Baskets.Remove(itembasket);
         }
     }
 }

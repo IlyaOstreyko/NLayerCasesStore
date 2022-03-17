@@ -12,7 +12,7 @@ namespace NLayerCasesStore.DAL.Repositories
 {
     public class EFUnitOfWork : IUnitOfWork
     {
-        private CasesStoreContext db;
+        private CasesStoreContext _casesStoreContext;
         private UserRepository userRepository;
         private OrderRepository orderRepository;
         private CaseRepository caseRepository;
@@ -20,14 +20,14 @@ namespace NLayerCasesStore.DAL.Repositories
 
         public EFUnitOfWork(DbContextOptions<CasesStoreContext> options)
         {
-            db = new CasesStoreContext(options);
+            _casesStoreContext = new CasesStoreContext(options);
         }
         public IRepository<User> Users
         {
             get
             {
                 if (userRepository == null)
-                    userRepository = new UserRepository(db);
+                    userRepository = new UserRepository(_casesStoreContext);
                 return userRepository;
             }
         }
@@ -36,7 +36,7 @@ namespace NLayerCasesStore.DAL.Repositories
             get
             {
                 if (basketRepository == null)
-                    basketRepository = new BasketRepository(db);
+                    basketRepository = new BasketRepository(_casesStoreContext);
                 return basketRepository;
             }
         }
@@ -45,7 +45,7 @@ namespace NLayerCasesStore.DAL.Repositories
             get
             {
                 if (caseRepository == null)
-                    caseRepository = new CaseRepository(db);
+                    caseRepository = new CaseRepository(_casesStoreContext);
                 return caseRepository;
             }
         }
@@ -55,34 +55,14 @@ namespace NLayerCasesStore.DAL.Repositories
             get
             {
                 if (orderRepository == null)
-                    orderRepository = new OrderRepository(db);
+                    orderRepository = new OrderRepository(_casesStoreContext);
                 return orderRepository;
             }
         }
 
         public void Save()
         {
-            db.SaveChanges();
-        }
-
-        private bool disposed = false;
-
-        public virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
-            {
-                if (disposing)
-                {
-                    db.Dispose();
-                }
-                this.disposed = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            _casesStoreContext.SaveChanges();
         }
     }
 }

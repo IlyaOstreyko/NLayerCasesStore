@@ -12,13 +12,8 @@ namespace NLayerCasesStore.DAL.Entities
         public string Model { get; set; }
         public string Color { get; set; }
         public int Price { get; set; }
-        public int Number_cases { get; set; }
+        public int CasesNumber { get; set; }
         public virtual List<Order> Orders { get; set; }
         public virtual List<Basket> Baskets { get; set; }
-        public Case()
-        {
-            Orders = new List<Order>();
-            Baskets = new List<Basket>();
-        }
     }
 }
