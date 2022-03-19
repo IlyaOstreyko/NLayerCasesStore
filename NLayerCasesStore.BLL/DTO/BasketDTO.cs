@@ -8,5 +8,7 @@ namespace NLayerCasesStore.BLL.DTO
 {
     internal class BasketDTO
     {
+        public int BasketId { get; set; }
+        public int? UserId { get; set; }
     }
 }

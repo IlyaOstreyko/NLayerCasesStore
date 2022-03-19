@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace NLayerCasesStore.BLL.Interfaces
 {
-    interface IOrderService
+    interface ICaseService
     {
-        void MakeOrder(OrderDTO orderDto);
-        OrderDTO GetOrder(int? id);
-        IEnumerable<OrderDTO> GetOrder();
+        //void MakeOrder(CaseDTO caseDto);
+        CaseDTO GetCase(int? id);
+        IEnumerable<CaseDTO> GetCase();
     }
 }

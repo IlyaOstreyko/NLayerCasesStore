@@ -38,7 +38,7 @@ namespace NLayerCasesStore.DAL.Repositories
         {
             _casesStoreContext.Entry(itembasket).State = EntityState.Modified;
         }
-        public IEnumerable<Basket> Find(Func<Basket, Boolean> predicate)
+        public IEnumerable<Basket> Find(Func<Basket, bool> predicate)
         {
             return _casesStoreContext.Baskets.Where(predicate).ToList();
         }

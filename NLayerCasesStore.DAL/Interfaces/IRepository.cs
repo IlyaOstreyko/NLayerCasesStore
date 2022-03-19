@@ -10,6 +10,7 @@ namespace NLayerCasesStore.DAL.Interfaces
     {
         IEnumerable<T> GetAll();
         T Get(int id);
+        //IEnumerable<T> Find(int IdDependent);
         IEnumerable<T> Find(Func<T, Boolean> predicate);
         void Create(T item);
         void Update(T item);
