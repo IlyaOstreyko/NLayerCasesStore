@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using NLayerCasesStore.DAL.DataModels;
 using NLayerCasesStore.DAL.EF;
 using NLayerCasesStore.DAL.Entities;
 using NLayerCasesStore.DAL.Interfaces;
@@ -10,38 +12,84 @@ using System.Threading.Tasks;
 
 namespace NLayerCasesStore.DAL.Repositories
 {
-    public class CaseRepository : IRepository<Case>
+    public class CaseRepository : IRepository<CaseDataModel>
     {
         private CasesStoreContext _casesStoreContext;
+        private readonly IMapper _mapper;
 
-        public CaseRepository(CasesStoreContext casesStoreContext)
+        public CaseRepository(CasesStoreContext casesStoreContext, IMapper mapper)
         {
             _casesStoreContext = casesStoreContext;
+            _mapper = mapper;
         }
 
-        public IEnumerable<Case> GetAll()
+        public IEnumerable<CaseDataModel> GetAll()
         {
-            return _casesStoreContext.Cases.Include(o => o.Orders);
+            var cases = _casesStoreContext.Cases.Include(o => o.Orders);
+            var casesDM = _mapper.Map<IEnumerable<CaseDataModel>>(cases);
+
+            return casesDM;
         }
 
-        public Case Get(int id)
+        //public CaseDataModel Get(int id)
+        //{
+        //    var itemCase = _casesStoreContext.Cases.Find(id);
+        //    var itemCaseDM = new CaseDataModel
+        //    {
+        //        CaseId = itemCase.CaseId,
+        //        Company = itemCase.Company,
+        //        Model = itemCase.Model,
+        //        Color = itemCase.Color,
+        //        Price = itemCase.Price,
+        //        CasesNumber = itemCase.CasesNumber
+        //    };
+        //    return itemCaseDM;
+        //}
+        public CaseDataModel Get(int id)
         {
-            return _casesStoreContext.Cases.Find(id);
+            var caseItem = _casesStoreContext.Cases.Find(id);
+            var caseDM = _mapper.Map<CaseDataModel>(caseItem);
+
+            return caseDM;
         }
 
-        public void Create(Case itemcase)
+        public void Create(CaseDataModel itemCaseDM)
         {
-            _casesStoreContext.Cases.Add(itemcase);
+            //var itemCase = new Case
+            //{
+            //    Company = itemCaseDM.Company,
+            //    Model = itemCaseDM.Model,
+            //    Color = itemCaseDM.Color,
+            //    Price = itemCaseDM.Price,
+            //    CasesNumber = itemCaseDM.CasesNumber
+            //};
+            //_casesStoreContext.Cases.Add(itemCase);
+            var itemCase = _mapper.Map<Case>(itemCaseDM);
+            _casesStoreContext.Cases.Add(itemCase);
         }
 
-        public void Update(Case itemcase)
+        public void Update(CaseDataModel itemCaseDM)
         {
-            _casesStoreContext.Entry(itemcase).State = EntityState.Modified;
+            //var itemCase = new Case
+            //{
+            //    Company = itemCaseDM.Company,
+            //    Model = itemCaseDM.Model,
+            //    Color = itemCaseDM.Color,
+            //    Price = itemCaseDM.Price,
+            //    CasesNumber = itemCaseDM.CasesNumber
+            //};
+            //_casesStoreContext.Entry(itemCase).State = EntityState.Modified;
+            var itemCase = _mapper.Map<Case>(itemCaseDM);
+            _casesStoreContext.Entry(itemCase).State = EntityState.Modified;
         }
-        public IEnumerable<Case> Find(Func<Case, bool> predicate)
-        {
-            return _casesStoreContext.Cases.Where(predicate).ToList();
-        }
+        //public IEnumerable<CaseDataModel> Find(Func<CaseDataModel, bool> predicate)
+        //{
+        //    var cases = _casesStoreContext.Cases.Where(predicate).ToList();
+        //    var casesDM = _mapper.Map<IEnumerable<CaseDataModel>>(cases);
+
+        //    return casesDM;
+        //    //return _casesStoreContext.Cases.Where(predicate).ToList();
+        //}
         public void Delete(int id)
         {
             Case itemcase = _casesStoreContext.Cases.Find(id);

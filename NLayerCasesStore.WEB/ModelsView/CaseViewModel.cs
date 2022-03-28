@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NLayerCasesStore.BLL.DTO
+namespace NLayerCasesStore.WEB.ModelsView
 {
-    public class CaseDTO
+    internal class CaseViewModel
     {
         public int CaseId { get; set; }
         public string Company { get; set; }

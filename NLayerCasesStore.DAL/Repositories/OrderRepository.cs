@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using NLayerCasesStore.DAL.DataModels;
 using NLayerCasesStore.DAL.EF;
 using NLayerCasesStore.DAL.Entities;
 using NLayerCasesStore.DAL.Interfaces;
@@ -10,38 +12,63 @@ using System.Threading.Tasks;
 
 namespace NLayerCasesStore.DAL.Repositories
 {
-    public class OrderRepository : IRepository<Order>
+    public class OrderRepository : IRepository<OrderDataModel>
     {
         private CasesStoreContext _casesStoreContext;
+        private readonly IMapper _mapper;
 
-        public OrderRepository(CasesStoreContext casesStoreContext)
+        public OrderRepository(CasesStoreContext casesStoreContext, IMapper mapper)
         {
             _casesStoreContext = casesStoreContext;
+            _mapper = mapper;
         }
 
-        public IEnumerable<Order> GetAll()
+        public IEnumerable<OrderDataModel> GetAll()
         {
-            return _casesStoreContext.Orders.Include(o => o.Cases);
+            //return _casesStoreContext.Orders.Include(o => o.Cases);
+            var orders = _casesStoreContext.Orders.Include(o => o.Cases);
+            var ordersDM = _mapper.Map<IEnumerable<OrderDataModel>>(orders);
+
+            return ordersDM;
         }
 
-        public Order Get(int id)
+        public OrderDataModel Get(int id)
         {
-            return _casesStoreContext.Orders.Find(id);
+            //return _casesStoreContext.Orders.Find(id);
+            var order = _casesStoreContext.Orders.Find(id);
+            var orderDM = _mapper.Map<OrderDataModel>(order);
+
+            return orderDM;
         }
 
-        public void Create(Order order)
+        public void Create(OrderDataModel orderDM)
         {
+            //var order = new Order
+            //{
+            //    Address = orderDM.Address,
+            //    Status = orderDM.Status,
+            //    UserId = orderDM.UserId
+            //};
+            var order = _mapper.Map<Order>(orderDM);
             _casesStoreContext.Orders.Add(order);
         }
 
-        public void Update(Order order)
+        public void Update(OrderDataModel orderDM)
         {
+            //var order = new Order
+            //{
+            //    Address = orderDM.Address,
+            //    Status = orderDM.Status,
+            //    UserId = orderDM.UserId
+            //};
+
+            var order = _mapper.Map<Order>(orderDM);
             _casesStoreContext.Entry(order).State = EntityState.Modified;
         }
-        public IEnumerable<Order> Find(Func<Order, bool> predicate)
-        {
-            return _casesStoreContext.Orders.Include(o => o.Cases).Where(predicate).ToList();
-        }
+        //public IEnumerable<OrderDataModel> Find(Func<Order, bool> predicate)
+        //{
+        //    return _casesStoreContext.Orders.Include(o => o.Cases).Where(predicate).ToList();
+        //}
         public void Delete(int id)
         {
             Order order = _casesStoreContext.Orders.Find(id);

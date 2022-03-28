@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using NLayerCasesStore.DAL.DataModels;
 using NLayerCasesStore.DAL.EF;
 using NLayerCasesStore.DAL.Entities;
 using NLayerCasesStore.DAL.Interfaces;
@@ -17,45 +19,47 @@ namespace NLayerCasesStore.DAL.Repositories
         private OrderRepository orderRepository;
         private CaseRepository caseRepository;
         private BasketRepository basketRepository;
+        private IMapper _mapper;
 
         public EFUnitOfWork(DbContextOptions<CasesStoreContext> options)
         {
             _casesStoreContext = new CasesStoreContext(options);
+            
         }
-        public IRepository<User> Users
+        public IRepository<UserDataModel> Users
         {
             get
             {
                 if (userRepository == null)
-                    userRepository = new UserRepository(_casesStoreContext);
+                    userRepository = new UserRepository(_casesStoreContext, _mapper);
                 return userRepository;
             }
         }
-        public IRepository<Basket> Baskets
+        public IRepository<BasketDataModel> Baskets
         {
             get
             {
                 if (basketRepository == null)
-                    basketRepository = new BasketRepository(_casesStoreContext);
+                    basketRepository = new BasketRepository(_casesStoreContext, _mapper);
                 return basketRepository;
             }
         }
-        public IRepository<Case> Cases
+        public IRepository<CaseDataModel> Cases
         {
             get
             {
                 if (caseRepository == null)
-                    caseRepository = new CaseRepository(_casesStoreContext);
+                    caseRepository = new CaseRepository(_casesStoreContext, _mapper);
                 return caseRepository;
             }
         }
 
-        public IRepository<Order> Orders
+        public IRepository<OrderDataModel> Orders
         {
             get
             {
                 if (orderRepository == null)
-                    orderRepository = new OrderRepository(_casesStoreContext);
+                    orderRepository = new OrderRepository(_casesStoreContext, _mapper);
                 return orderRepository;
             }
         }

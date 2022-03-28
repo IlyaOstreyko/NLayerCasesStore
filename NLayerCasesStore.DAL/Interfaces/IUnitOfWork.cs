@@ -1,4 +1,5 @@
-﻿using NLayerCasesStore.DAL.Entities;
+﻿using NLayerCasesStore.DAL.DataModels;
+using NLayerCasesStore.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,11 @@ namespace NLayerCasesStore.DAL.Interfaces
 {
     public interface IUnitOfWork
     {
-        IRepository<Basket> Baskets { get; }
-        IRepository<Order> Orders { get; }
+        IRepository<BasketDataModel> Baskets { get; }
+        IRepository<OrderDataModel> Orders { get; }
         //IRepository<Admin> Admins { get; }
-        IRepository<User> Users { get; }
-        IRepository<Case> Cases { get; }
+        IRepository<UserDataModel> Users { get; }
+        IRepository<CaseDataModel> Cases { get; }
         void Save();
     }
 }

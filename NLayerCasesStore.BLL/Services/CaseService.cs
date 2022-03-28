@@ -9,16 +9,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NLayerCasesStore.DAL.Interfaces;
+using NLayerCasesStore.DAL.DataModels;
 
 namespace NLayerCasesStore.BLL.Services
 {
     public class CaseService : ICaseService
     {
-        IUnitOfWork Database { get; set; }
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public CaseService(IUnitOfWork uow)
+        public CaseService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            Database = uow;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         //public void MakeCase(CaseDTO caseDto)
         //{
@@ -37,20 +40,26 @@ namespace NLayerCasesStore.BLL.Services
         //    Database.Save();
         //}
 
-        public CaseDTO GetCase(int? id)
+        public CaseDTO GetCase(int id)
         {
-            if (id == null)
-                throw new ValidationException("Не установлено id чехла", "");
-            var caseItem = Database.Cases.Get(id.Value);
-            if (caseItem == null)
-                throw new ValidationException("Чехол не найден", "");
+            //if (id == null)
+            //    throw new ValidationException("Не установлено id чехла", "");
+            var caseItem = _unitOfWork.Cases.Get(id);
 
-            return new CaseDTO { Company = caseItem.Company, Model = caseItem.Model, Color = caseItem.Color, Price = caseItem.Price };
+            if (caseItem == null)
+            {
+                throw new ValidationException("", "Чехол не найден");
+            }                
+            return _mapper.Map<CaseDTO>(caseItem);
+            //return new CaseDTO { Company = caseItem.Company, Model = caseItem.Model, Color = caseItem.Color, Price = caseItem.Price };
+
         }
         public IEnumerable<CaseDTO> GetCases()
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Case, CaseDTO>()).CreateMapper();
-            return mapper.Map<IEnumerable<Case>, List<CaseDTO>>(Database.Cases.GetAll());
+            var cases = _unitOfWork.Cases.GetAll();
+            var caseDtos = _mapper.Map<IEnumerable<CaseDTO>>(cases);
+
+            return caseDtos;
         }
     }
 }

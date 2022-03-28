@@ -11,6 +11,6 @@ namespace NLayerCasesStore.BLL.Interfaces
     {
         void MakeOrder(OrderDTO orderDto);
         OrderDTO GetOrder(int? id);
-        IEnumerable<OrderDTO> GetOrder();
+        IEnumerable<OrderDTO> GetOrders();
     }
 }
