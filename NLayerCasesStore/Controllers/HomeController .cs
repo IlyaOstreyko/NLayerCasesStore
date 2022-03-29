@@ -14,21 +14,26 @@ namespace NLayerCasesStore.WEB.Controllers
 {
     public class HomeController : Controller
     {
-        private ICaseService _caseService;
-        private readonly IMapper _mapper;
+        public ICaseService _caseService;
+        public readonly IMapper _mapper;
 
         public HomeController(ICaseService caseService, IMapper mapper)
         {
             _caseService = caseService;
             _mapper = mapper;
         }
-        public ActionResult AllCases()
+        //public ActionResult AllCases()
+        //{
+        //    var caseDtos = _caseService.GetCases();
+        //    var cases = _mapper.Map<IEnumerable<CaseDTO>>(caseDtos);
+        //    return View(cases);
+        //}
+        public ActionResult Index()
         {
             var caseDtos = _caseService.GetCases();
             var cases = _mapper.Map<IEnumerable<CaseDTO>>(caseDtos);
             return View(cases);
         }
-
         //public ActionResult MakeOrder(int? id)
         //{
         //    try

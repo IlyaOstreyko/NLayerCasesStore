@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NLayerCasesStore.WEB.ModelsView
 {
-    internal class CaseViewModel
+    public class CaseViewModel
     {
         public int CaseId { get; set; }
         public string Company { get; set; }

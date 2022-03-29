@@ -15,8 +15,8 @@ namespace NLayerCasesStore.BLL.Services
 {
     public class CaseService : ICaseService
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        public readonly IUnitOfWork _unitOfWork;
+        public readonly IMapper _mapper;
 
         public CaseService(IUnitOfWork unitOfWork, IMapper mapper)
         {
