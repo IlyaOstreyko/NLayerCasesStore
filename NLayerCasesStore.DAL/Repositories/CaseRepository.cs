@@ -25,26 +25,11 @@ namespace NLayerCasesStore.DAL.Repositories
 
         public IEnumerable<CaseDataModel> GetAll()
         {
-            var cases = _casesStoreContext.Cases.Include(o => o.Orders);
+            var cases = _casesStoreContext.Cases.ToList();
             var casesDM = _mapper.Map<IEnumerable<CaseDataModel>>(cases);
 
             return casesDM;
         }
-
-        //public CaseDataModel Get(int id)
-        //{
-        //    var itemCase = _casesStoreContext.Cases.Find(id);
-        //    var itemCaseDM = new CaseDataModel
-        //    {
-        //        CaseId = itemCase.CaseId,
-        //        Company = itemCase.Company,
-        //        Model = itemCase.Model,
-        //        Color = itemCase.Color,
-        //        Price = itemCase.Price,
-        //        CasesNumber = itemCase.CasesNumber
-        //    };
-        //    return itemCaseDM;
-        //}
         public CaseDataModel Get(int id)
         {
             var caseItem = _casesStoreContext.Cases.Find(id);
@@ -63,22 +48,12 @@ namespace NLayerCasesStore.DAL.Repositories
             //    Price = itemCaseDM.Price,
             //    CasesNumber = itemCaseDM.CasesNumber
             //};
-            //_casesStoreContext.Cases.Add(itemCase);
             var itemCase = _mapper.Map<Case>(itemCaseDM);
             _casesStoreContext.Cases.Add(itemCase);
         }
 
         public void Update(CaseDataModel itemCaseDM)
         {
-            //var itemCase = new Case
-            //{
-            //    Company = itemCaseDM.Company,
-            //    Model = itemCaseDM.Model,
-            //    Color = itemCaseDM.Color,
-            //    Price = itemCaseDM.Price,
-            //    CasesNumber = itemCaseDM.CasesNumber
-            //};
-            //_casesStoreContext.Entry(itemCase).State = EntityState.Modified;
             var itemCase = _mapper.Map<Case>(itemCaseDM);
             _casesStoreContext.Entry(itemCase).State = EntityState.Modified;
         }
@@ -94,7 +69,9 @@ namespace NLayerCasesStore.DAL.Repositories
         {
             Case itemcase = _casesStoreContext.Cases.Find(id);
             if (itemcase != null)
+            {
                 _casesStoreContext.Cases.Remove(itemcase);
+            } 
         }
     }
 }

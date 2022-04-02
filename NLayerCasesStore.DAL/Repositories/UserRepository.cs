@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace NLayerCasesStore.DAL.Repositories
 {
-    internal class UserRepository : IRepository<UserDataModel>
+    internal class UserRepository : IUserRepository<UserDataModel>
     {
         private CasesStoreContext _casesStoreContext;
         private readonly IMapper _mapper;
@@ -25,9 +25,8 @@ namespace NLayerCasesStore.DAL.Repositories
 
         public IEnumerable<UserDataModel> GetAll()
         {
-            var users = _casesStoreContext.Users.Include(o => o.Orders);
+            var users = _casesStoreContext.Users.ToList();
             var usersDM = _mapper.Map<IEnumerable<UserDataModel>>(users);
-
             return usersDM;
         }
 
@@ -35,35 +34,43 @@ namespace NLayerCasesStore.DAL.Repositories
         {
             var user = _casesStoreContext.Users.Find(id);
             var userDM = _mapper.Map<UserDataModel>(user);
-
             return userDM;
         }
-
+        public UserDataModel GetOnEmailAndPassword(string email, string password)
+        {
+            var user = _casesStoreContext.Users.FirstOrDefaultAsync(u => u.UserMail == email && u.UserPassword == password);
+            var userDM = _mapper.Map<UserDataModel>(user);
+            return userDM;
+        }
         public void Create(UserDataModel userDM)
         {
-            //var user = new User
-            //{
-            //    UserMail = userDM.UserMail,
-            //    UserName = userDM.UserName,
-            //    UserPassword = userDM.UserPassword,
-            //    UserRole = "user"
-            //};
             var user = _mapper.Map<User>(userDM);
+            user.UserRole = "user";
             _casesStoreContext.Users.Add(user);
         }
 
         public void Update(UserDataModel userDM)
         {
-            //var user = new User
-            //{
-            //    UserMail = userDM.UserMail,
-            //    UserName = userDM.UserName,
-            //    UserPassword = userDM.UserPassword,
-            //    UserRole = "user",
-            //    BasketId = userDM.BasketId
-            //};
             var user = _mapper.Map<User>(userDM);
             _casesStoreContext.Entry(user).State = EntityState.Modified;
+        }
+        public bool CheckEmail(string email)
+        {
+            var user = _casesStoreContext.Users.FirstOrDefaultAsync(u => u.UserMail == email);
+            if (user is null)
+            {
+                return false;
+            }
+            return true;
+        }
+        public bool CheckLogin(string login)
+        {
+            var user = _casesStoreContext.Users.FirstOrDefaultAsync(u => u.UserName == login);
+            if (user is null)
+            {
+                return false;
+            }
+            return true;
         }
         //public IEnumerable<UserDataModel> Find(Func<User, bool> predicate)
         //{

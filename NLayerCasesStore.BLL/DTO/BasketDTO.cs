@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace NLayerCasesStore.BLL.DTO
 {
-    internal class BasketDTO
+    public class BasketDTO
     {
         public int BasketId { get; set; }
         public int? UserId { get; set; }

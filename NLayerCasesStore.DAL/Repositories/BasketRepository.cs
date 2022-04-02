@@ -25,16 +25,13 @@ namespace NLayerCasesStore.DAL.Repositories
 
         public IEnumerable<BasketDataModel> GetAll()
         {
-            //return _casesStoreContext.Baskets.Include(o => o.Cases);
             var baskets = _casesStoreContext.Baskets.Include(o => o.Cases);
             var basketsDM = _mapper.Map<IEnumerable<BasketDataModel>>(baskets);
-
             return basketsDM;
         }
 
         public BasketDataModel Get(int id)
         {
-            //return _casesStoreContext.Baskets.Find(id);
             var basket = _casesStoreContext.Baskets.Find(id);
             var basketDM = _mapper.Map<BasketDataModel>(basket);
 
@@ -43,26 +40,13 @@ namespace NLayerCasesStore.DAL.Repositories
 
         public void Create(BasketDataModel itemBasketDM)
         {
-            //var itemBasket = new Basket
-            //{
-            //    UserId = itemBasketDM.UserId
-            //};
-            //_casesStoreContext.Baskets.Add(itemBasket);
             var itemBasket = _mapper.Map<Basket>(itemBasketDM);
-
             _casesStoreContext.Baskets.Add(itemBasket);
         }
 
         public void Update(BasketDataModel itemBasketDM)
         {
-            //var itemBasket = new Basket
-            //{
-            //    UserId = itemBasketDM.UserId
-            //};
-            //_casesStoreContext.Entry(itemBasket).State = EntityState.Modified;
-
             var itemBasket = _mapper.Map<Basket>(itemBasketDM);
-
             _casesStoreContext.Entry(itemBasket).State = EntityState.Modified;
         }
         //public IEnumerable<BasketDataModel> Find(Func<BasketDataModel, bool> predicate)

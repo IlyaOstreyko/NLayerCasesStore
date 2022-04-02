@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NLayerCasesStore.BLL.Interfaces;
 using NLayerCasesStore.BLL.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NLayerCasesStore.WEB.Controllers
 {
@@ -22,17 +23,12 @@ namespace NLayerCasesStore.WEB.Controllers
             _caseService = caseService;
             _mapper = mapper;
         }
-        //public ActionResult AllCases()
-        //{
-        //    var caseDtos = _caseService.GetCases();
-        //    var cases = _mapper.Map<IEnumerable<CaseDTO>>(caseDtos);
-        //    return View(cases);
-        //}
-        public ActionResult Index()
+        [Authorize]
+        public ActionResult AllCases()
         {
             var caseDtos = _caseService.GetCases();
-            var cases = _mapper.Map<IEnumerable<CaseDTO>>(caseDtos);
-            return View(cases);
+            var casesDM = _mapper.Map<IEnumerable<CaseViewModel>>(caseDtos);
+            return View(casesDM.ToList());
         }
         //public ActionResult MakeOrder(int? id)
         //{

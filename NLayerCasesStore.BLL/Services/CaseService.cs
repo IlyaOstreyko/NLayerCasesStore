@@ -49,17 +49,31 @@ namespace NLayerCasesStore.BLL.Services
             if (caseItem == null)
             {
                 throw new ValidationException("", "Чехол не найден");
-            }                
-            return _mapper.Map<CaseDTO>(caseItem);
+            }
+
+            //return _mapper.Map<CaseDTO>(caseItem);
+            var caseDto = new CaseDTO
+            {
+                CaseId = caseItem.CaseId,
+                Company = caseItem.Company,
+                Model = caseItem.Model,
+                Color = caseItem.Color,
+                Price = caseItem.Price,
+                CasesNumber = caseItem.CasesNumber
+            };
+
+            return caseDto;
             //return new CaseDTO { Company = caseItem.Company, Model = caseItem.Model, Color = caseItem.Color, Price = caseItem.Price };
 
         }
         public IEnumerable<CaseDTO> GetCases()
         {
             var cases = _unitOfWork.Cases.GetAll();
-            var caseDtos = _mapper.Map<IEnumerable<CaseDTO>>(cases);
-
-            return caseDtos;
+            //var caseDtos = _mapper.Map<IEnumerable<CaseDTO>>(cases);
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<CaseDataModel, CaseDTO>());
+            var mapper = new Mapper(config);
+            var casesDM = mapper.Map<IEnumerable<CaseDTO >> (cases);
+            return casesDM;
         }
     }
 }

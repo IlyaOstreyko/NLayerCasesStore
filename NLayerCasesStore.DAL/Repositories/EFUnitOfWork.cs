@@ -14,19 +14,20 @@ namespace NLayerCasesStore.DAL.Repositories
 {
     public class EFUnitOfWork : IUnitOfWork
     {
-        private CasesStoreContext _casesStoreContext;
+        private readonly CasesStoreContext _casesStoreContext;
         private UserRepository userRepository;
         private OrderRepository orderRepository;
         private CaseRepository caseRepository;
         private BasketRepository basketRepository;
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
-        public EFUnitOfWork(DbContextOptions<CasesStoreContext> options)
+        public EFUnitOfWork(DbContextOptions<CasesStoreContext> options, IMapper mapper)
         {
             _casesStoreContext = new CasesStoreContext(options);
+            _mapper = mapper;
             
         }
-        public IRepository<UserDataModel> Users
+        public IUserRepository<UserDataModel> Users
         {
             get
             {

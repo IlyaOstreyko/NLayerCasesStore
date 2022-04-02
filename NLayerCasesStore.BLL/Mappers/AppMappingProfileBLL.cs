@@ -13,7 +13,10 @@ namespace NLayerCasesStore.BLL.Mappers
     {
         public AppMappingProfileBLL()
         {
-            CreateMap<CaseDataModel, CaseDTO>();
+            CreateMap<CaseDataModel, CaseDTO>().ReverseMap();
+            CreateMap<BasketDataModel, BasketDTO>().ReverseMap();
+            CreateMap<OrderDataModel, OrderDTO>().ReverseMap();
+            CreateMap<UserDataModel, UserDTO>().ReverseMap();
         }
     }
 }

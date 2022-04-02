@@ -25,7 +25,6 @@ namespace NLayerCasesStore.DAL.Repositories
 
         public IEnumerable<OrderDataModel> GetAll()
         {
-            //return _casesStoreContext.Orders.Include(o => o.Cases);
             var orders = _casesStoreContext.Orders.Include(o => o.Cases);
             var ordersDM = _mapper.Map<IEnumerable<OrderDataModel>>(orders);
 
@@ -34,7 +33,6 @@ namespace NLayerCasesStore.DAL.Repositories
 
         public OrderDataModel Get(int id)
         {
-            //return _casesStoreContext.Orders.Find(id);
             var order = _casesStoreContext.Orders.Find(id);
             var orderDM = _mapper.Map<OrderDataModel>(order);
 
@@ -55,13 +53,6 @@ namespace NLayerCasesStore.DAL.Repositories
 
         public void Update(OrderDataModel orderDM)
         {
-            //var order = new Order
-            //{
-            //    Address = orderDM.Address,
-            //    Status = orderDM.Status,
-            //    UserId = orderDM.UserId
-            //};
-
             var order = _mapper.Map<Order>(orderDM);
             _casesStoreContext.Entry(order).State = EntityState.Modified;
         }
