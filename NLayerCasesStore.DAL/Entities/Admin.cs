@@ -6,8 +6,8 @@ namespace NLayerCasesStore.DAL.Entities
     {
         [Key, Required]
         public int Id { get; set; }
-        public string Name_admin { get; set; }
-        public string Password_admin { get; set; }
-        public string Mail_admin { get; set; }
+        public string AdminName { get; set; }
+        public string AdminPassword { get; set; }
+        public string AdminMail { get; set; }
     }
 }

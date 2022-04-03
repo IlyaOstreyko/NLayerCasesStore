@@ -1,4 +1,5 @@
-﻿using NLayerCasesStore.DAL.Entities;
+﻿using NLayerCasesStore.DAL.DataModels;
+using NLayerCasesStore.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,15 @@ using System.Threading.Tasks;
 
 namespace NLayerCasesStore.DAL.Interfaces
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork
     {
-        IRepository<Basket> Baskets { get; }
-        IRepository<Order> Orders { get; }
-        IRepository<Admin> Admins { get; }
-        IRepository<User> Users { get; }
-        IRepository<Case> Cases { get; }
+        IRepository<BasketDataModel> Baskets { get; }
+        IRepository<OrderDataModel> Orders { get; }
+
+        //IRepository<Admin> Admins { get; }
+
+        IUserRepository<UserDataModel> Users { get; }
+        IRepository<CaseDataModel> Cases { get; }
         void Save();
     }
 }
