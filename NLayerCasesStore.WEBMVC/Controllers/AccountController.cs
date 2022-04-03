@@ -54,9 +54,9 @@ namespace NLayerCasesStore.WEBMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (_userService.CheckEmail(model.Email))
+                if (_userService.CheckEmail(model.Email) == false)
                 {
-                    if (_userService.CheckLogin(model.Login))
+                    if (_userService.CheckLogin(model.Login) == false)
                     {
                         var userDto = _mapper.Map<UserDTO>(model);
                         _userService.CreateUser(userDto);
@@ -64,11 +64,17 @@ namespace NLayerCasesStore.WEBMVC.Controllers
                         return RedirectToAction("Index", "Home");
                     }
                     else
+                    {
                         ModelState.AddModelError("", "Некорректный логин");
+                    }
+                        
                     
                 }
                 else
+                {
                     ModelState.AddModelError("", "Некорректный email");
+                }
+                    
             }
             return View(model);
         }

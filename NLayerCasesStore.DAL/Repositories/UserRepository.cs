@@ -38,7 +38,7 @@ namespace NLayerCasesStore.DAL.Repositories
         }
         public UserDataModel GetOnEmailAndPassword(string email, string password)
         {
-            var user = _casesStoreContext.Users.FirstOrDefaultAsync(u => u.UserMail == email && u.UserPassword == password);
+            var user = _casesStoreContext.Users.FirstOrDefault(u => u.UserMail == email && u.UserPassword == password);
             var userDM = _mapper.Map<UserDataModel>(user);
             return userDM;
         }
@@ -56,7 +56,7 @@ namespace NLayerCasesStore.DAL.Repositories
         }
         public bool CheckEmail(string email)
         {
-            var user = _casesStoreContext.Users.FirstOrDefaultAsync(u => u.UserMail == email);
+            var user = _casesStoreContext.Users.FirstOrDefault(u => u.UserMail == email);
             if (user is null)
             {
                 return false;
@@ -65,7 +65,7 @@ namespace NLayerCasesStore.DAL.Repositories
         }
         public bool CheckLogin(string login)
         {
-            var user = _casesStoreContext.Users.FirstOrDefaultAsync(u => u.UserName == login);
+            var user = _casesStoreContext.Users.FirstOrDefault(u => u.UserName == login);
             if (user is null)
             {
                 return false;

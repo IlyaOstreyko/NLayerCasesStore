@@ -57,7 +57,7 @@ namespace NLayerCasesStore.BLL.Services
         }
         public bool CheckEmail(string email)
         {
-            return _unitOfWork.Users.CheckLogin(email);
+            return _unitOfWork.Users.CheckEmail(email);
         }
 
         public void CreateUser(UserDTO userDto)
