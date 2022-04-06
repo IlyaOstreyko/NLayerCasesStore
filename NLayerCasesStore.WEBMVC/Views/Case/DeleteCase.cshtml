@@ -1,0 +1,33 @@
+﻿@model NLayerCasesStore.WEBMVC.ModelsView.CaseViewModel
+@{
+    ViewBag.Title = "Delete Case";
+}
+ 
+<div>
+    <dl class="dl-horizontal">
+        <dt>Company</dt>
+        <dd>
+            @Html.DisplayFor(model => model.Company)
+        </dd>
+        <dt>Model</dt>
+        <dd>
+            @Html.DisplayFor(model => model.Model)
+        </dd>
+        <dt>Collor</dt>
+        <dd>
+            @Html.DisplayFor(model => model.Color)
+        </dd>
+        <dt>Price</dt>
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+    </dl>
+ 
+    <div>
+        <form asp-controller="Case" asp-action="DeleteCase" method="post">
+            <div class="form-group">
+                <input type="submit" class="btn btn-default" value="Удалить" />
+            </div>
+        </form>
+    </div>
+</div>

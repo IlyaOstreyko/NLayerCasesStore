@@ -35,7 +35,7 @@ namespace NLayerCasesStore.WEBMVC.Controllers
                 var userDTO = _userService.GetUserOnEmailAndPassword(model.Email, model.Password);
                 if (userDTO != null)
                 {
-                    await Authenticate(model.Email); // аутентификация
+                    await Authenticate(userDTO.UserMail,userDTO.UserRole);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -54,13 +54,13 @@ namespace NLayerCasesStore.WEBMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (_userService.CheckEmail(model.Email) == false)
+                if (!_userService.CheckEmail(model.Email))
                 {
-                    if (_userService.CheckLogin(model.Login) == false)
+                    if (!_userService.CheckLogin(model.Login))
                     {
                         var userDto = _mapper.Map<UserDTO>(model);
                         _userService.CreateUser(userDto);
-                        await Authenticate(model.Email);
+                        await Authenticate(userDto.UserMail, userDto.UserRole);
                         return RedirectToAction("Index", "Home");
                     }
                     else
@@ -79,11 +79,12 @@ namespace NLayerCasesStore.WEBMVC.Controllers
             return View(model);
         }
 
-        private async Task Authenticate(string userName)
+        private async Task Authenticate(string userName, string userRole)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, userRole)
             };
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));

@@ -20,7 +20,7 @@ namespace NLayerCasesStore.DAL.Repositories
         public UserRepository(CasesStoreContext casesStoreContext, IMapper mapper)
         {
             _casesStoreContext = casesStoreContext;
-            _mapper = _mapper;
+            _mapper = mapper;
         }
 
         public IEnumerable<UserDataModel> GetAll()
