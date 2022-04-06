@@ -23,6 +23,19 @@ namespace NLayerCasesStore.BLL.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+
+        public void CreateCase(CaseDTO caseDto)
+        {
+            _unitOfWork.Cases.Create(_mapper.Map<CaseDataModel>(caseDto));
+            _unitOfWork.Save();
+        }
+
+        public void DeleteCase(int id)
+        {
+            _unitOfWork.Cases.Delete(id);
+            _unitOfWork.Save();
+        }
+
         //public void MakeCase(CaseDTO caseDto)
         //{
         //    Case itemCase = Database.Cases.Get(caseDto.CaseId);
@@ -51,20 +64,18 @@ namespace NLayerCasesStore.BLL.Services
                 throw new ValidationException("", "Чехол не найден");
             }
 
-            //return _mapper.Map<CaseDTO>(caseItem);
-            var caseDto = new CaseDTO
-            {
-                CaseId = caseItem.CaseId,
-                Company = caseItem.Company,
-                Model = caseItem.Model,
-                Color = caseItem.Color,
-                Price = caseItem.Price,
-                CasesNumber = caseItem.CasesNumber
-            };
+            return _mapper.Map<CaseDTO>(caseItem);
+            //var caseDto = new CaseDTO
+            //{
+            //    CaseId = caseItem.CaseId,
+            //    Company = caseItem.Company,
+            //    Model = caseItem.Model,
+            //    Color = caseItem.Color,
+            //    Price = caseItem.Price,
+            //    CasesNumber = caseItem.CasesNumber
+            //};
 
-            return caseDto;
-            //return new CaseDTO { Company = caseItem.Company, Model = caseItem.Model, Color = caseItem.Color, Price = caseItem.Price };
-
+            //return caseDto;
         }
         public IEnumerable<CaseDTO> GetCases()
         {
@@ -74,6 +85,12 @@ namespace NLayerCasesStore.BLL.Services
             var mapper = new Mapper(config);
             var casesDM = mapper.Map<IEnumerable<CaseDTO >> (cases);
             return casesDM;
+        }
+
+        public void UpdateCase(CaseDTO caseDto)
+        {
+            _unitOfWork.Cases.Update(_mapper.Map<CaseDataModel>(caseDto));
+            _unitOfWork.Save();
         }
     }
 }

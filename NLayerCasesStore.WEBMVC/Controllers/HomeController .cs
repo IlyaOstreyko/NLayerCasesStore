@@ -23,12 +23,9 @@ namespace NLayerCasesStore.WEBMVC.Controllers
             _caseService = caseService;
             _mapper = mapper;
         }
-        [Authorize]
-        public ActionResult AllCases()
+        public IActionResult Index()
         {
-            var caseDtos = _caseService.GetCases();
-            var casesDM = _mapper.Map<IEnumerable<CaseViewModel>>(caseDtos);
-            return View(casesDM.ToList());
+            return View();
         }
         //public ActionResult MakeOrder(int? id)
         //{

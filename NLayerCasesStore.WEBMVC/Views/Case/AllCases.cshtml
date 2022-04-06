@@ -1,0 +1,27 @@
+﻿@model IEnumerable<NLayerCasesStore.WEBMVC.ModelsView.CaseViewModel>
+@{
+    ViewBag.Title = "AllCases";
+}
+<a asp-action="AddCase" asp-controller="Case">Add Case</a>
+<table class="table">
+     <tr>
+            <th>Company</th>
+            <th>Model</th>
+            <th>Color</th>
+            <th>Price</th>
+            <th>CasesNumber</th>
+         </tr>
+    @foreach (var item in Model)
+    {        
+        <tr><td>@item.Company</td>
+            <td>@item.Model</td>
+            <td>@item.Color</td>
+            <td>@item.Price</td>
+            <td>@item.CasesNumber</td>
+            <td>
+                <a asp-action="EditCase" asp-controller="Case" asp-route-id="@item.CaseId">Изменить</a> |
+                <a asp-action="DeleteCase" asp-controller="Case" asp-route-id="@item.CaseId">Удалить</a>
+            </td></tr>
+    }
+</table>
+

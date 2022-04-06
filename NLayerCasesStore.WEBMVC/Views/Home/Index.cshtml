@@ -1,34 +1,7 @@
-﻿@model IEnumerable<NLayerCasesStore.WEBMVC.ModelsView.CaseViewModel>
-@{
-    //ViewData["Title"] = "Список смартфонов";
-    Layout = null;
+﻿@{
+    ViewBag.Title = "Index";
 }
-<!DOCTYPE html>
- 
-<html>
-<head>
-    <title>Магазин чехлов для мобильных телефонов</title>
-</head>
-<body>
-    <h3>Чехлы</h3>
-    <table>
-        <tr>
-            <td>Производитель</td>
-            <td>Модель</td>
-            <td>Цвет</td>
-            <td>Цена</td>
-            <td></td>
-        </tr>
-        @foreach (var CaseViewModel in Model)
-            {
-            <tr>
-                <td>@CaseViewModel.Company</td>
-                <td>@CaseViewModel.Model</td>   
-                <td>@CaseViewModel.Color</td>
-                <td>@CaseViewModel.Price</td>
-                <td><a href="~/Home/Buy/@CaseViewModel.CaseId">Купить</a></td>
-            </tr>
-        }
-    </table>
-</body>
-</html>
+<h2>Menu</h2>
+<a asp-action="Register" asp-controller="Account">Registeration</a>
+<a asp-action="Login" asp-controller="Account">Login</a>
+<a asp-action="AllCases" asp-controller="Case">AllCases</a>
