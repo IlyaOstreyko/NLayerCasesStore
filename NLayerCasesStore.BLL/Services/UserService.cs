@@ -14,8 +14,8 @@ namespace NLayerCasesStore.BLL.Services
 {
     public class UserService : IUserService
     {
-        public readonly IUnitOfWork _unitOfWork;
-        public readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
         public UserService(IUnitOfWork unitOfWork, IMapper mapper)
         {
@@ -30,10 +30,17 @@ namespace NLayerCasesStore.BLL.Services
             {
                 throw new ValidationException("", "пользователь не найден");
             }
+            var userDto = _mapper.Map<UserDTO>(userItem);
 
-            return _mapper.Map<UserDTO>(userItem);
+            return userDto;
         }
-        
+        public int GetIdOnEmail(string email)
+        {
+            var userId = _unitOfWork.Users.GetIdOnEmail(email);
+
+            return userId;
+        }
+
         public UserDTO GetUserOnEmailAndPassword(string email, string password)
         {
             var userItem = _unitOfWork.Users.GetOnEmailAndPassword(email, password);
@@ -42,13 +49,15 @@ namespace NLayerCasesStore.BLL.Services
             {
                 throw new ValidationException("", "пользователь не найден");
             }
+            var userDto = _mapper.Map<UserDTO>(userItem);
 
-            return _mapper.Map<UserDTO>(userItem);
+            return userDto;
         }
         public IEnumerable<UserDTO> GetUsers()
         {
             var users = _unitOfWork.Users.GetAll();
             var userDto = _mapper.Map<IEnumerable<UserDTO>>(users);
+
             return userDto;
         }
         public bool CheckLogin(string login)

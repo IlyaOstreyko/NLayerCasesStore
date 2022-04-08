@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace NLayerCasesStore.DAL.Repositories
 {
-    public class BasketRepository : IRepository<BasketDataModel>
+    internal class BasketRepository : IBasketRepository
     {
-        private CasesStoreContext _casesStoreContext;
+        private readonly CasesStoreContext _casesStoreContext;
         private readonly IMapper _mapper;
 
         public BasketRepository(CasesStoreContext casesStoreContext, IMapper mapper)
@@ -23,41 +23,38 @@ namespace NLayerCasesStore.DAL.Repositories
             _mapper = mapper;
         }
 
-        public IEnumerable<BasketDataModel> GetAll()
+        public void Create(int idUser)
         {
-            var baskets = _casesStoreContext.Baskets.Include(o => o.Cases);
-            var basketsDM = _mapper.Map<IEnumerable<BasketDataModel>>(baskets);
-            return basketsDM;
+            var basket = new Basket {UserId = idUser };
+            _casesStoreContext.Baskets.Add(basket);
+        }
+        public void AddCaseInBasket(int idUser, CaseDataModel caseDM)
+        {
+            var basket = _casesStoreContext.Baskets.FirstOrDefault(b => b.UserId == idUser);
+
+            if (basket is null)
+            {
+                Create(idUser);
+            }
+
+            basket = _casesStoreContext.Baskets.FirstOrDefault(b => b.UserId == idUser);
+            var caseItem = _mapper.Map<Case>(caseDM);
+            basket.Cases.Add(caseItem);
         }
 
-        public BasketDataModel Get(int id)
+        public void ClearBasket()
         {
-            var basket = _casesStoreContext.Baskets.Find(id);
-            var basketDM = _mapper.Map<BasketDataModel>(basket);
-
-            return basketDM;
+            throw new NotImplementedException();
         }
 
-        public void Create(BasketDataModel itemBasketDM)
+        public void DeleteCasesInBasket(List<CaseDataModel> casesDM)
         {
-            var itemBasket = _mapper.Map<Basket>(itemBasketDM);
-            _casesStoreContext.Baskets.Add(itemBasket);
+            throw new NotImplementedException();
         }
 
-        public void Update(BasketDataModel itemBasketDM)
+        public List<CaseDataModel> GetCaseInBasket(int idUser)
         {
-            var itemBasket = _mapper.Map<Basket>(itemBasketDM);
-            _casesStoreContext.Entry(itemBasket).State = EntityState.Modified;
-        }
-        //public IEnumerable<BasketDataModel> Find(Func<BasketDataModel, bool> predicate)
-        //{
-        //    return _casesStoreContext.Baskets.Where(predicate).ToList();
-        //}
-        public void Delete(int id)
-        {
-            Basket itembasket = _casesStoreContext.Baskets.Find(id);
-            if (itembasket != null)
-                _casesStoreContext.Baskets.Remove(itembasket);
+            throw new NotImplementedException();
         }
     }
 }

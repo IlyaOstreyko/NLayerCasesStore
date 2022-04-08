@@ -10,11 +10,8 @@ namespace NLayerCasesStore.DAL.Interfaces
 {
     public interface IUnitOfWork
     {
-        IRepository<BasketDataModel> Baskets { get; }
+        IBasketRepository Baskets { get; }
         IRepository<OrderDataModel> Orders { get; }
-
-        //IRepository<Admin> Admins { get; }
-
         IUserRepository<UserDataModel> Users { get; }
         IRepository<CaseDataModel> Cases { get; }
         void Save();
