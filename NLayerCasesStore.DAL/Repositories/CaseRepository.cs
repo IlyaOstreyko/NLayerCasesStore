@@ -14,7 +14,7 @@ namespace NLayerCasesStore.DAL.Repositories
 {
     public class CaseRepository : IRepository<CaseDataModel>
     {
-        private CasesStoreContext _casesStoreContext;
+        private readonly CasesStoreContext _casesStoreContext;
         private readonly IMapper _mapper;
 
         public CaseRepository(CasesStoreContext casesStoreContext, IMapper mapper)
@@ -40,14 +40,6 @@ namespace NLayerCasesStore.DAL.Repositories
 
         public void Create(CaseDataModel itemCaseDM)
         {
-            //var itemCase = new Case
-            //{
-            //    Company = itemCaseDM.Company,
-            //    Model = itemCaseDM.Model,
-            //    Color = itemCaseDM.Color,
-            //    Price = itemCaseDM.Price,
-            //    CasesNumber = itemCaseDM.CasesNumber
-            //};
             var itemCase = _mapper.Map<Case>(itemCaseDM);
             _casesStoreContext.Cases.Add(itemCase);
         }
@@ -57,17 +49,10 @@ namespace NLayerCasesStore.DAL.Repositories
             var itemCase = _mapper.Map<Case>(itemCaseDM);
             _casesStoreContext.Entry(itemCase).State = EntityState.Modified;
         }
-        //public IEnumerable<CaseDataModel> Find(Func<CaseDataModel, bool> predicate)
-        //{
-        //    var cases = _casesStoreContext.Cases.Where(predicate).ToList();
-        //    var casesDM = _mapper.Map<IEnumerable<CaseDataModel>>(cases);
-
-        //    return casesDM;
-        //    //return _casesStoreContext.Cases.Where(predicate).ToList();
-        //}
         public void Delete(int id)
         {
             Case itemcase = _casesStoreContext.Cases.Find(id);
+
             if (itemcase != null)
             {
                 _casesStoreContext.Cases.Remove(itemcase);

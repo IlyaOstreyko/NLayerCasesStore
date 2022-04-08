@@ -19,8 +19,9 @@
             <td>@item.Price</td>
             <td>@item.CasesNumber</td>
             <td>
-                <a asp-action="EditCase" asp-controller="Case" asp-route-id="@item.CaseId">Изменить</a> |
-                <a asp-action="DeleteCase" asp-controller="Case" asp-route-id="@item.CaseId">Удалить</a>
+                <a asp-action="EditCase" asp-controller="Case" asp-route-id="@item.CaseId">Edit</a> |
+                <a asp-action="DeleteCase" asp-controller="Case" asp-route-id="@item.CaseId">Delete</a> |
+                <a asp-action="AddInBasket" asp-controller="Basket" asp-route-id="@item.CaseId">Add to basket</a>
             </td></tr>
     }
 </table>

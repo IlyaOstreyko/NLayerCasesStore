@@ -17,6 +17,7 @@ using NLayerCasesStore.WEBMVC.Mappers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace NLayerCasesStore.WEBMVC
@@ -40,7 +41,11 @@ namespace NLayerCasesStore.WEBMVC
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                 });
-            services.AddControllersWithViews();
+            services.AddAuthorization(options => {
+                options.AddPolicy("OnlyForAdmin", policy => {
+                    policy.RequireClaim("role", "admin");
+                });
+            });
             services.AddAutoMapper(typeof(AppMappingProfileBLL), typeof(AppMappingProfileDAL), typeof(AppMappingProfileWEB));
             services.AddRazorPages();
             services.AddScoped<ICaseService, CaseService>();
