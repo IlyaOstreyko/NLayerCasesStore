@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "AllCases";
 }
-<a asp-action="AddCase" asp-controller="Case">Add Case</a>
+<a asp-action="AddOrder" asp-controller="Order">Add order</a>
 <table class="table">
      <tr>
             <th>Company</th>
@@ -19,18 +19,14 @@
             <td>@item.Price</td>
             <td>@item.CasesNumber</td>
             <td>
-                <a asp-action="EditCase" asp-controller="Case" asp-route-id="@item.CaseId">Edit</a> |
-                <a asp-action="DeleteCase" asp-controller="Case" asp-route-id="@item.CaseId">Delete</a> |
-                <a asp-action="AddInBasket" asp-controller="Basket" asp-route-id="@item.CaseId">Add to basket</a>
+                <a asp-action="DeleteCaseFromBasket" asp-controller="Basket" asp-route-id="@item.CaseId">Delete case from basket</a>
             </td></tr>
     }
 </table>
     <div>
-        <form asp-controller="Basket" asp-action="AllCasesInBasket" method="post">
+        <form asp-controller="Basket" asp-action="ClearBasket" method="post">
             <div class="form-group">
-                <input type="submit" class="btn btn-default" value="Show Basket" />
+                <input type="submit" class="btn btn-default" value="Clear Basket" />
             </div>
         </form>
     </div>
-
-

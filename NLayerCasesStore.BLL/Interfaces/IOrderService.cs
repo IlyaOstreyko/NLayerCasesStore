@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NLayerCasesStore.BLL.Interfaces
 {
-    interface IOrderService
+    public interface IOrderService
     {
         void MakeOrder(OrderDTO orderDto);
         OrderDTO GetOrder(int? id);

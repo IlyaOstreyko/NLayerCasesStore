@@ -27,9 +27,17 @@ namespace NLayerCasesStore.DAL.Repositories
         {
             var basket = new Basket {UserId = idUser };
             _casesStoreContext.Baskets.Add(basket);
+            //var user = _casesStoreContext.Users.Find(idUser);
+            //user.BasketId = basket.BasketId;
+            _casesStoreContext.SaveChanges();
         }
         public void AddCaseInBasket(int idUser, CaseDataModel caseDM)
         {
+            int count = _casesStoreContext.Cases.Local.Count;
+            _casesStoreContext.ChangeTracker.Clear();
+            count = _casesStoreContext.Cases.Local.Count;
+
+            var itemCase = _mapper.Map<Case>(caseDM);
             var basket = _casesStoreContext.Baskets.FirstOrDefault(b => b.UserId == idUser);
 
             if (basket is null)
@@ -38,13 +46,21 @@ namespace NLayerCasesStore.DAL.Repositories
             }
 
             basket = _casesStoreContext.Baskets.FirstOrDefault(b => b.UserId == idUser);
-            var caseItem = _mapper.Map<Case>(caseDM);
-            basket.Cases.Add(caseItem);
+            basket.Cases.Add(itemCase);
         }
-
-        public void ClearBasket()
+        public void RemoveCaseFromBasket(int idUser, int caseId)
         {
-            throw new NotImplementedException();
+            var basket = _casesStoreContext.Baskets.FirstOrDefault(b => b.UserId == idUser);
+            _casesStoreContext.Entry(basket).Collection(c => c.Cases).Load();
+            var itemCase = basket.Cases.FirstOrDefault(x => x.CaseId == caseId);
+            basket.Cases.Remove(itemCase);
+        }
+        
+        public void ClearBasket(int idUser)
+        {
+            var basket = _casesStoreContext.Baskets.FirstOrDefault(b => b.UserId == idUser);
+            _casesStoreContext.Entry(basket).Collection(c => c.Cases).Load();
+            basket.Cases.Clear();
         }
 
         public void DeleteCasesInBasket(List<CaseDataModel> casesDM)

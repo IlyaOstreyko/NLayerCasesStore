@@ -13,20 +13,20 @@ namespace NLayerCasesStore.WEBMVC.Controllers
 {
     public class CaseController : Controller
     {
-        private readonly ICaseService _caseService;
+        private readonly IUnitOfWorkService _iUnitOfWorkService;
         private readonly IMapper _mapper;
 
-        public CaseController(ICaseService caseService, IMapper mapper)
+        public CaseController(IUnitOfWorkService iUnitOfWorkService, IMapper mapper)
         {
-            _caseService = caseService;
+            _iUnitOfWorkService = iUnitOfWorkService;
             _mapper = mapper;
         }
 
         //[HttpPost]
         public IActionResult AllCases()
         {
-            var caseDtos = _caseService.GetCases();
-            var casesDM = _mapper.Map<IEnumerable<CaseViewModel>>(caseDtos);
+            var casesDto = _iUnitOfWorkService.Cases.GetCases();
+            var casesDM = _mapper.Map<IEnumerable<CaseViewModel>>(casesDto);
 
             return View(casesDM.ToList());
         }
@@ -41,7 +41,7 @@ namespace NLayerCasesStore.WEBMVC.Controllers
         [HttpPost]
         public IActionResult AddCase(CaseViewModel caseVM)
         {
-            _caseService.CreateCase(_mapper.Map<CaseDTO>(caseVM));
+            _iUnitOfWorkService.Cases.CreateCase(_mapper.Map<CaseDTO>(caseVM));
 
             return RedirectToAction("AllCases");
         }
@@ -49,9 +49,9 @@ namespace NLayerCasesStore.WEBMVC.Controllers
         [Authorize(Policy = "OnlyForAdmin")]
         public IActionResult EditCase(int? id)
         {
-            if (id != null)
+            if (id.HasValue)
             {
-                var caseDto = _caseService.GetCase((int)id);
+                var caseDto = _iUnitOfWorkService.Cases.GetCase(id.Value);
 
                 if (caseDto != null)
                 {
@@ -67,8 +67,8 @@ namespace NLayerCasesStore.WEBMVC.Controllers
         [HttpPost]
         public IActionResult EditCase(CaseViewModel caseVM)
         {
-            _caseService.UpdateCase(_mapper.Map<CaseDTO>(caseVM));
-
+            //_iUnitOfWorkService.Baskets.AddCaseInBasket("ilyaostreyko@gmail.com", _mapper.Map<CaseDTO>(caseVM));
+            _iUnitOfWorkService.Cases.UpdateCase(_mapper.Map<CaseDTO>(caseVM));
             return RedirectToAction("AllCases");
         }
 
@@ -77,9 +77,9 @@ namespace NLayerCasesStore.WEBMVC.Controllers
         [Authorize(Policy = "OnlyForAdmin")]
         public IActionResult ConfirmDelete(int? id)
         {
-            if (id != null)
+            if (id.HasValue)
             {
-                var caseDto = _caseService.GetCase((int)id);
+                var caseDto = _iUnitOfWorkService.Cases.GetCase(id.Value);
 
                 if (caseDto != null)
                 {
@@ -97,11 +97,11 @@ namespace NLayerCasesStore.WEBMVC.Controllers
         {
             if (id.HasValue)
             {
-                var caseDto = _caseService.GetCase(id.Value);
+                var caseDto = _iUnitOfWorkService.Cases.GetCase(id.Value);
 
                 if (caseDto != null)
                 {
-                    _caseService.DeleteCase((int)id);
+                    _iUnitOfWorkService.Cases.DeleteCase(id.Value);
 
                     return RedirectToAction("AllCases");
                 }

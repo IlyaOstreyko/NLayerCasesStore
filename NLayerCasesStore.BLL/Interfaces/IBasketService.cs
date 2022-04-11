@@ -9,6 +9,8 @@ namespace NLayerCasesStore.BLL.Interfaces
 {
     public interface IBasketService
     {
-        void AddCaseInBasket(string userEmail, int idCase);
+        void AddCaseInBasket(string userEmail, CaseDTO caseDto);
+        void RemoveCaseFromBasket(string userEmail, int caseId);
+        void ClearBasket(string userEmail);
     }
 }

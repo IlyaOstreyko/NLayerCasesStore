@@ -1,4 +1,5 @@
 ﻿using NLayerCasesStore.BLL.DTO;
+using NLayerCasesStore.DAL.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace NLayerCasesStore.BLL.Interfaces
     public interface IUserService
     {
         UserDTO GetUser(int id);
+        UserDTO GetUserOnEmail(string email);
+        IEnumerable<CaseDTO> GetCasesInBasketFromEmail(string email);
         int GetIdOnEmail(string email);
         UserDTO GetUserOnEmailAndPassword(string email, string password);
         bool CheckEmail(string email);
