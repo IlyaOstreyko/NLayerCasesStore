@@ -41,6 +41,19 @@ namespace NLayerCasesStore.BLL.Services
             return userId;
         }
 
+        public UserDTO GetUserOnEmail(string email)
+        {
+            var userId = _unitOfWork.Users.GetIdOnEmail(email);
+            var userDto = GetUser(userId);
+            return userDto;
+        }
+        public IEnumerable<CaseDTO> GetCasesInBasketFromEmail(string email)
+        {
+            var casesDM = _unitOfWork.Users.GetCasesInBasketFromEmail(email);
+            var casesDto = _mapper.Map<IEnumerable<CaseDTO>>(casesDM);
+            return casesDto;
+        }
+
         public UserDTO GetUserOnEmailAndPassword(string email, string password)
         {
             var userItem = _unitOfWork.Users.GetOnEmailAndPassword(email, password);

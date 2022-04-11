@@ -44,6 +44,16 @@ namespace NLayerCasesStore.DAL.Repositories
 
             return user.UserId;
         }
+        public IEnumerable<CaseDataModel> GetCasesInBasketFromEmail(string email)
+        {
+            var user = _casesStoreContext.Users.FirstOrDefault(u => u.UserMail == email);
+            _casesStoreContext.Entry(user).Reference(u => u.Basket).Load();
+            var basket = user.Basket;
+            _casesStoreContext.Entry(basket).Collection(c => c.Cases).Load();
+            var cases = basket.Cases;
+            var casesDM = _mapper.Map<IEnumerable<CaseDataModel>>(cases);
+            return casesDM;
+        }
         public UserDataModel GetOnEmailAndPassword(string email, string password)
         {
             var user = _casesStoreContext.Users.FirstOrDefault(u => u.UserMail == email && u.UserPassword == password);

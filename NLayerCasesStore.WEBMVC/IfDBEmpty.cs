@@ -48,7 +48,7 @@ namespace NLayerCasesStore.WEBMVC
                     new User
                     {
                         UserName = "user",
-                        UserMail = "ilyaostreyko@gmail.com",
+                        UserMail = "ilya.ostreyko.96@mail.ru",
                         UserPassword = "user",
                         UserRole = "user"
                     }

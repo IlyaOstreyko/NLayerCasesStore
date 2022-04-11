@@ -12,9 +12,7 @@ namespace NLayerCasesStore.DAL.Entities
         public string UserMail { get; set; }
         public string UserPassword { get; set; }   
         public string UserRole { get; set; }  
-        public int? BasketId { get; set; }
-        [ForeignKey("BasketId")]
         public Basket Basket { get; set; }
-        public virtual List<Order> Orders { get; set; }
+        public virtual List<Order> Orders { get; set; } = new List<Order>();
     }
 }

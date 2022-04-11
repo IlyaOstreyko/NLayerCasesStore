@@ -48,9 +48,8 @@ namespace NLayerCasesStore.WEBMVC
             });
             services.AddAutoMapper(typeof(AppMappingProfileBLL), typeof(AppMappingProfileDAL), typeof(AppMappingProfileWEB));
             services.AddRazorPages();
-            services.AddScoped<ICaseService, CaseService>();
-            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();
+            services.AddScoped<IUnitOfWorkService, UnitOfWorkService>();
 
         }
 

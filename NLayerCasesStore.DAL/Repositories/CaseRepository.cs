@@ -25,7 +25,7 @@ namespace NLayerCasesStore.DAL.Repositories
 
         public IEnumerable<CaseDataModel> GetAll()
         {
-            var cases = _casesStoreContext.Cases.ToList();
+            var cases = _casesStoreContext.Cases.AsNoTracking().ToList();
             var casesDM = _mapper.Map<IEnumerable<CaseDataModel>>(cases);
 
             return casesDM;
@@ -38,15 +38,15 @@ namespace NLayerCasesStore.DAL.Repositories
             return caseDM;
         }
 
-        public void Create(CaseDataModel itemCaseDM)
+        public void Create(CaseDataModel caseDM)
         {
-            var itemCase = _mapper.Map<Case>(itemCaseDM);
+            var itemCase = _mapper.Map<Case>(caseDM);
             _casesStoreContext.Cases.Add(itemCase);
         }
 
-        public void Update(CaseDataModel itemCaseDM)
+        public void Update(CaseDataModel caseDM)
         {
-            var itemCase = _mapper.Map<Case>(itemCaseDM);
+            var itemCase = _mapper.Map<Case>(caseDM);
             _casesStoreContext.Entry(itemCase).State = EntityState.Modified;
         }
         public void Delete(int id)

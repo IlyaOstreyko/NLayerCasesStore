@@ -11,7 +11,8 @@ namespace NLayerCasesStore.DAL.Interfaces
     {
         void Create(int idUser);
         void AddCaseInBasket(int idUser, CaseDataModel caseDM);
-        void ClearBasket();
+        void RemoveCaseFromBasket(int idUser, int caseId);
+        void ClearBasket(int idUser);
         void DeleteCasesInBasket(List<CaseDataModel> casesDM);
         List<CaseDataModel> GetCaseInBasket(int idUser);
 

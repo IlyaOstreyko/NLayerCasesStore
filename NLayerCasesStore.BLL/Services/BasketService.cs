@@ -22,11 +22,24 @@ namespace NLayerCasesStore.BLL.Services
             _mapper = mapper;
         }
 
-        public void AddCaseInBasket(string userEmail, int idCase)
+        public void AddCaseInBasket(string userEmail, CaseDTO caseDto)
         {
             var idUser = _unitOfWork.Users.GetIdOnEmail(userEmail);
-            var caseDM = _unitOfWork.Cases.Get(idCase);
+            var caseDM = _mapper.Map<CaseDataModel>(caseDto);
             _unitOfWork.Baskets.AddCaseInBasket(idUser, caseDM);
+            _unitOfWork.Save();
+        }
+
+        public void RemoveCaseFromBasket(string userEmail, int caseId)
+        {
+            var idUser = _unitOfWork.Users.GetIdOnEmail(userEmail);
+            _unitOfWork.Baskets.RemoveCaseFromBasket(idUser, caseId);
+            _unitOfWork.Save();
+        }
+        public void ClearBasket(string userEmail)
+        {
+            var idUser = _unitOfWork.Users.GetIdOnEmail(userEmail);
+            _unitOfWork.Baskets.ClearBasket(idUser);
             _unitOfWork.Save();
         }
     }

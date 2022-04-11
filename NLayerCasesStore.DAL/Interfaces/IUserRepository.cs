@@ -12,6 +12,7 @@ namespace NLayerCasesStore.DAL.Interfaces
         IEnumerable<T> GetAll();
         T Get(int id);
         int GetIdOnEmail(string email);
+        IEnumerable<CaseDataModel> GetCasesInBasketFromEmail(string email);
         T GetOnEmailAndPassword(string email, string password);
         bool CheckEmail(string email);
         bool CheckLogin(string login);

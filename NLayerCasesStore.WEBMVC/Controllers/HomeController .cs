@@ -15,12 +15,12 @@ namespace NLayerCasesStore.WEBMVC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ICaseService _caseService;
+        private readonly IUnitOfWorkService _iUnitOfWorkService;
         private readonly IMapper _mapper;
 
-        public HomeController(ICaseService caseService, IMapper mapper)
+        public HomeController(IUnitOfWorkService iUnitOfWorkService, IMapper mapper)
         {
-            _caseService = caseService;
+            _iUnitOfWorkService = iUnitOfWorkService;
             _mapper = mapper;
         }
         public IActionResult Index()

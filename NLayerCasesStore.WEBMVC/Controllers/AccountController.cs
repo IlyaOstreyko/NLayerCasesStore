@@ -13,12 +13,12 @@ namespace NLayerCasesStore.WEBMVC.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly IUnitOfWorkService _iUnitOfWorkService;
         private readonly IMapper _mapper;
 
-        public AccountController(IUserService userService, IMapper mapper)
+        public AccountController(IUnitOfWorkService iUnitOfWorkService, IMapper mapper)
         {
-            _userService = userService;
+            _iUnitOfWorkService = iUnitOfWorkService;
             _mapper = mapper;
         }
 
@@ -34,7 +34,7 @@ namespace NLayerCasesStore.WEBMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userDTO = _userService.GetUserOnEmailAndPassword(model.UserMail, model.UserPassword);
+                var userDTO = _iUnitOfWorkService.Users.GetUserOnEmailAndPassword(model.UserMail, model.UserPassword);
 
                 if (userDTO != null)
                 {
@@ -59,13 +59,13 @@ namespace NLayerCasesStore.WEBMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
         {
-            var isValidLogin = !_userService.CheckLogin(model.UserName);
-            var isValidEmail = !_userService.CheckEmail(model.UserMail);
+            var isValidLogin = !_iUnitOfWorkService.Users.CheckLogin(model.UserName);
+            var isValidEmail = !_iUnitOfWorkService.Users.CheckEmail(model.UserMail);
 
             if (ModelState.IsValid && isValidEmail && isValidLogin)
             {
                 var userDto = _mapper.Map<UserDTO>(model);
-                _userService.CreateUser(userDto);
+                _iUnitOfWorkService.Users.CreateUser(userDto);
                 await Authenticate(userDto.UserMail, userDto.UserRole);
 
                 return RedirectToAction("Index", "Home");               
