@@ -12,7 +12,6 @@ namespace NLayerCasesStore.BLL.Interfaces
     {
         UserDTO GetUser(int id);
         UserDTO GetUserOnEmail(string email);
-        IEnumerable<CaseDTO> GetCasesInBasketFromEmail(string email);
         int GetIdOnEmail(string email);
         UserDTO GetUserOnEmailAndPassword(string email, string password);
         bool CheckEmail(string email);

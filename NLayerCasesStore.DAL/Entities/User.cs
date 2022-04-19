@@ -13,6 +13,6 @@ namespace NLayerCasesStore.DAL.Entities
         public string UserPassword { get; set; }   
         public string UserRole { get; set; }  
         public Basket Basket { get; set; }
-        public virtual List<Order> Orders { get; set; } = new List<Order>();
+        public List<Order> Orders { get; set; } = new List<Order>();
     }
 }

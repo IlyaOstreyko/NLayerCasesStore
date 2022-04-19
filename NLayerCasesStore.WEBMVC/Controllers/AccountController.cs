@@ -36,7 +36,7 @@ namespace NLayerCasesStore.WEBMVC.Controllers
             {
                 var userDTO = _iUnitOfWorkService.Users.GetUserOnEmailAndPassword(model.UserMail, model.UserPassword);
 
-                if (userDTO != null)
+                if (userDTO != null && userDTO.UserMail != null)
                 {
                     await Authenticate(userDTO.UserMail,userDTO.UserRole);
 
@@ -66,6 +66,7 @@ namespace NLayerCasesStore.WEBMVC.Controllers
             {
                 var userDto = _mapper.Map<UserDTO>(model);
                 _iUnitOfWorkService.Users.CreateUser(userDto);
+                userDto.UserRole = "user";
                 await Authenticate(userDto.UserMail, userDto.UserRole);
 
                 return RedirectToAction("Index", "Home");               

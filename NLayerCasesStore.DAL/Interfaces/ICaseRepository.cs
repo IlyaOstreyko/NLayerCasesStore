@@ -1,5 +1,4 @@
-﻿using NLayerCasesStore.DAL.DataModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,17 +6,14 @@ using System.Threading.Tasks;
 
 namespace NLayerCasesStore.DAL.Interfaces
 {
-    public interface IUserRepository<T> where T : class
+    public interface ICaseRepository<T> where T : class
     {
         IEnumerable<T> GetAll();
+        IEnumerable<T> GetCasesInBasketFromEmail(string email);
+        IEnumerable<T> GetCasesInBasketInStock(string email);
         T Get(int id);
-        int GetIdOnEmail(string email);
-        T GetOnEmailAndPassword(string email, string password);
-        bool CheckEmail(string email);
-        bool CheckLogin(string login);
         void Create(T item);
         void Update(T item);
         void Delete(int id);
-
     }
 }

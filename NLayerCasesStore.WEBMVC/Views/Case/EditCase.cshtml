@@ -5,23 +5,23 @@
 <form asp-action="EditCase" asp-controller="Case" asp-route-CaseId="@Model.CaseId">
     <div class="form-group">
         <label asp-for="Company" class="control-label">Company</label>
-        <input type="text" asp-for="Company" class="form-control" />
+        <input type="text" asp-for="Company" class="form-control" required="enter Company"/>
     </div>
     <div class="form-group">
         <label asp-for="Model" class="control-label">Model</label>
-        <input type="text" asp-for="Model" class="form-control" />
+        <input type="text" asp-for="Model" class="form-control" required="enter Model"/>
     </div>
     <div class="form-group">
         <label asp-for="Color" class="control-label">Color</label>
-        <input type="text" asp-for="Color" class="form-control" />
+        <input type="text" asp-for="Color" class="form-control" required="enter Color"/>
     </div>
     <div class="form-group">
         <label asp-for="Price" class="control-label">Price</label>
-        <input type="number" asp-for="Price" class="form-control" />
+        <input type="number" asp-for="Price" class="form-control" required="enter Price" min="0" max="9999"/>
     </div>
     <div class="form-group">
         <label asp-for="CasesNumber" class="control-label">CasesNumber</label>
-        <input type="number" asp-for="CasesNumber" class="form-control" />
+        <input type="number" asp-for="CasesNumber" class="form-control" required="enter CasesNumber" min="0" step="1" max="9999"/>
     </div>
     <div class="form-group">
         <input type="submit" value="Сохранить" class="btn btn-default" />

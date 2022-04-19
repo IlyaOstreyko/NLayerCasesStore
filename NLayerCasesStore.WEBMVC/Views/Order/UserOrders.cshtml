@@ -1,0 +1,44 @@
+﻿@model IEnumerable<NLayerCasesStore.WEBMVC.ModelsView.OrderViewModel>
+@{
+    ViewBag.Title = "AllOrders";
+}
+<div><a asp-action="AllCases" asp-controller="Case">All Cases</a></div>
+<div><a asp-action="UserCloseOrders" asp-controller="Order">Your history orders</a></div>
+<div><u><b>Your active orders</b></u></div>
+@foreach (var order in Model)
+{
+    <details>
+        <summary>
+            Order at the address:
+            <b>
+                @order.Address
+            </b>
+            <br>
+            Order time:
+            <b>
+                @order.DataOrder
+            </b>
+        </summary>
+        <ul>
+            <li>
+                <table class="table">
+                    <tr>
+                        <th>Company</th>
+                        <th>Model</th>
+                        <th>Color</th>
+                        <th>Price</th>
+                    </tr>
+                    @foreach (var caseItem in order.Cases)
+                    {
+                        <tr>
+                            <td>@caseItem.Company</td>
+                            <td>@caseItem.Model</td>
+                            <td>@caseItem.Color</td>
+                            <td>@caseItem.Price</td>
+                        </tr>
+                    }
+                </table>
+            </li>
+        </ul>
+    </details>
+}

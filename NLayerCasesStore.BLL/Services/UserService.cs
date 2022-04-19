@@ -47,12 +47,6 @@ namespace NLayerCasesStore.BLL.Services
             var userDto = GetUser(userId);
             return userDto;
         }
-        public IEnumerable<CaseDTO> GetCasesInBasketFromEmail(string email)
-        {
-            var casesDM = _unitOfWork.Users.GetCasesInBasketFromEmail(email);
-            var casesDto = _mapper.Map<IEnumerable<CaseDTO>>(casesDM);
-            return casesDto;
-        }
 
         public UserDTO GetUserOnEmailAndPassword(string email, string password)
         {
@@ -60,7 +54,8 @@ namespace NLayerCasesStore.BLL.Services
 
             if (userItem == null)
             {
-                throw new ValidationException("", "пользователь не найден");
+                var user = new UserDTO() { UserMail = null, UserPassword = null };
+                return user;
             }
             var userDto = _mapper.Map<UserDTO>(userItem);
 

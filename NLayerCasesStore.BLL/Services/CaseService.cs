@@ -23,7 +23,19 @@ namespace NLayerCasesStore.BLL.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-
+        public IEnumerable<CaseDTO> GetCasesInBasketFromEmail(string email)
+        {
+            var casesDM = _unitOfWork.Cases.GetCasesInBasketFromEmail(email);
+            var casesDto = _mapper.Map<IEnumerable<CaseDTO>>(casesDM);
+            _unitOfWork.Save();
+            return casesDto;
+        }
+        public IEnumerable<CaseDTO> GetCasesInBasketInStock(string email)
+        {
+            var casesDM = _unitOfWork.Cases.GetCasesInBasketInStock(email);
+            var casesDto = _mapper.Map<IEnumerable<CaseDTO>>(casesDM);
+            return casesDto;
+        }
         public void CreateCase(CaseDTO caseDto)
         {
             _unitOfWork.Cases.Create(_mapper.Map<CaseDataModel>(caseDto));

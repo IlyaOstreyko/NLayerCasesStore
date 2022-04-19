@@ -15,6 +15,28 @@ namespace NLayerCasesStore.DAL.EF
         {
             Database.EnsureCreated();
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<Basket>()
+                .HasMany(c => c.Cases)
+                .WithMany(s => s.Baskets)
+                .UsingEntity<BasketCase>(
+                   j => j
+                    .HasOne(pt => pt.Case)
+                    .WithMany(t => t.BasketsCases)
+                    .HasForeignKey(pt => pt.CaseId),
+                j => j
+                    .HasOne(pt => pt.Basket)
+                    .WithMany(p => p.BasketsCases)
+                    .HasForeignKey(pt => pt.BasketId),
+                j =>
+                {
+                    j.Property(pt => pt.NumberPairBasketCase).HasDefaultValue(1);
+                    j.HasKey(t => new { t.BasketId, t.CaseId });
+                    j.ToTable("BasketsCases");
+                });
+        }
         //static CasesStoreContext()
         //{
         //    Database.SetInitializer<CasesStoreContext>(new StoreDbInitializer());
