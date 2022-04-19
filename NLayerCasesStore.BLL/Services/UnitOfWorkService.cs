@@ -14,7 +14,7 @@ namespace NLayerCasesStore.BLL.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private UserService userService;
-        //private OrderService orderService;
+        private OrderService orderService;
         private CaseService caseService;
         private BasketService basketService;
 
@@ -61,17 +61,17 @@ namespace NLayerCasesStore.BLL.Services
             }
         }
 
-        //public IOrderService Orders
-        //{
-        //    get
-        //    {
-        //        if (orderService == null)
-        //        {
-        //            orderService = new OrderService(_unitOfWork, _mapper);
-        //        }
+        public IOrderService Orders
+        {
+            get
+            {
+                if (orderService == null)
+                {
+                    orderService = new OrderService(_unitOfWork, _mapper);
+                }
 
-        //        return orderService;
-        //    }
-        //}
+                return orderService;
+            }
+        }
     }
 }

@@ -23,43 +23,39 @@ namespace NLayerCasesStore.DAL.Repositories
             _mapper = mapper;
         }
 
-        public void Create(int idUser)
-        {
-            var basket = new Basket {UserId = idUser };
-            _casesStoreContext.Baskets.Add(basket);
-            //var user = _casesStoreContext.Users.Find(idUser);
-            //user.BasketId = basket.BasketId;
-            _casesStoreContext.SaveChanges();
-        }
         public void AddCaseInBasket(int idUser, CaseDataModel caseDM)
         {
-            int count = _casesStoreContext.Cases.Local.Count;
+            //int count = _casesStoreContext.Cases.Local.Count;
             _casesStoreContext.ChangeTracker.Clear();
-            count = _casesStoreContext.Cases.Local.Count;
+            //count = _casesStoreContext.Cases.Local.Count;
 
-            var itemCase = _mapper.Map<Case>(caseDM);
+            //var itemCase = _mapper.Map<Case>(caseDM);
+            var itemCase = _casesStoreContext.Cases.Find(caseDM.CaseId);
             var basket = _casesStoreContext.Baskets.FirstOrDefault(b => b.UserId == idUser);
 
             if (basket is null)
             {
-                Create(idUser);
+                basket = new Basket { UserId = idUser };
+                _casesStoreContext.Baskets.Add(basket);
             }
-
-            basket = _casesStoreContext.Baskets.FirstOrDefault(b => b.UserId == idUser);
             basket.Cases.Add(itemCase);
         }
         public void RemoveCaseFromBasket(int idUser, int caseId)
         {
-            var basket = _casesStoreContext.Baskets.FirstOrDefault(b => b.UserId == idUser);
-            _casesStoreContext.Entry(basket).Collection(c => c.Cases).Load();
+            var basket = _casesStoreContext.Baskets
+                .Include(a => a.Cases)
+                .FirstOrDefault(b => b.UserId == idUser);
+
             var itemCase = basket.Cases.FirstOrDefault(x => x.CaseId == caseId);
             basket.Cases.Remove(itemCase);
         }
         
         public void ClearBasket(int idUser)
         {
-            var basket = _casesStoreContext.Baskets.FirstOrDefault(b => b.UserId == idUser);
-            _casesStoreContext.Entry(basket).Collection(c => c.Cases).Load();
+            var basket = _casesStoreContext.Baskets
+                .Include(a => a.Cases)
+                .FirstOrDefault(b => b.UserId == idUser);
+
             basket.Cases.Clear();
         }
 

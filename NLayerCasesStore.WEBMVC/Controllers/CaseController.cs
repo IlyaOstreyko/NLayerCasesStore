@@ -27,13 +27,22 @@ namespace NLayerCasesStore.WEBMVC.Controllers
         {
             var casesDto = _iUnitOfWorkService.Cases.GetCases();
             var casesDM = _mapper.Map<IEnumerable<CaseViewModel>>(casesDto);
-
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewBag.Role = User.FindFirst("Role").Value;
+            }
+            else
+            {
+                ViewBag.Role = "anon";
+            }
+            
             return View(casesDM.ToList());
         }
 
         [Authorize(Policy = "OnlyForAdmin")]
         public IActionResult AddCase()
         {
+            
             return View();
         }
 
@@ -67,7 +76,6 @@ namespace NLayerCasesStore.WEBMVC.Controllers
         [HttpPost]
         public IActionResult EditCase(CaseViewModel caseVM)
         {
-            //_iUnitOfWorkService.Baskets.AddCaseInBasket("ilyaostreyko@gmail.com", _mapper.Map<CaseDTO>(caseVM));
             _iUnitOfWorkService.Cases.UpdateCase(_mapper.Map<CaseDTO>(caseVM));
             return RedirectToAction("AllCases");
         }

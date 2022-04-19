@@ -2,35 +2,110 @@
 @{
     ViewBag.Title = "AllCases";
 }
-<a asp-action="AddCase" asp-controller="Case">Add Case</a>
-<table class="table">
-     <tr>
-            <th>Company</th>
-            <th>Model</th>
-            <th>Color</th>
-            <th>Price</th>
+@if (ViewBag.Role == "admin")
+{
+    <div><a asp-action="AddCase" asp-controller="Case">Add Case</a></div>
+}
+<div><input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search from model"></div>
+<table id="myTable" class="table">
+    <tr>
+        <th>Company</th>
+        <th>Model</th>
+        <th>Color</th>
+        <th>Price</th>
+        @if (ViewBag.Role == "admin")
+        {
             <th>Number of cases in store</th>
-         </tr>
+        }
+        else
+        {
+            <th>Store availability</th>
+        }
+
+    </tr>
     @foreach (var item in Model)
-    {        
-        <tr><td>@item.Company</td>
+    {
+        <tr>
+            <td>@item.Company</td>
             <td>@item.Model</td>
             <td>@item.Color</td>
             <td>@item.Price</td>
-            <td>@item.CasesNumber</td>
+            @if (ViewBag.Role == "admin")
+            {
+                <td>@item.CasesNumber</td>
+            }
+            else
+            {
+                if(item.CasesNumber > 0)
+                {
+                    <td>in stock</td>
+                }
+                else
+                {
+                    <td>not available</td>
+                }
+            }
+            
             <td>
-                <a asp-action="EditCase" asp-controller="Case" asp-route-id="@item.CaseId">Edit</a> |
-                <a asp-action="DeleteCase" asp-controller="Case" asp-route-id="@item.CaseId">Delete</a> |
-                <a asp-action="AddInBasket" asp-controller="Basket" asp-route-id="@item.CaseId">Add to basket</a>
-            </td></tr>
+                @if (ViewBag.Role == "admin")
+                {
+                    <a asp-action="EditCase" asp-controller="Case" asp-route-id="@item.CaseId">Edit</a>
+                }
+                |
+                @if (ViewBag.Role == "admin")
+                {
+                    <a asp-action="DeleteCase" asp-controller="Case" asp-route-id="@item.CaseId">Delete</a>
+                }
+                |
+                @if (ViewBag.Role == "user")
+                {
+                    <a asp-action="AddInBasket" asp-controller="Basket" asp-route-id="@item.CaseId">Add to basket</a>
+                }
+
+            </td>
+        </tr>
     }
 </table>
+@if (ViewBag.Role == "user")
+{
     <div>
         <form asp-controller="Basket" asp-action="AllCasesInBasket" method="post">
             <div class="form-group">
-                <input type="submit" class="btn btn-default" value="Show Basket" />
+                <input type="submit" class="btn btn-default" value="Show basket" />
             </div>
         </form>
     </div>
+}
+@if (ViewBag.Role == "user")
+{
+    <div>
+        <form asp-controller="Order" asp-action="UserOrders" method="post">
+            <div class="form-group">
+                <input type="submit" class="btn btn-default" value="Show orders" />
+            </div>
+        </form>
+    </div>
+}
 
+<script>
+    function myFunction() {
+      var input, filter, table, tr, td, i, txtValue;
+      input = document.getElementById("myInput");
+      filter = input.value.toUpperCase();
+      table = document.getElementById("myTable");
+      tr = table.getElementsByTagName("tr");
+
+      for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[1];
+        if (td) {
+          txtValue = td.textContent || td.innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+</script>
 

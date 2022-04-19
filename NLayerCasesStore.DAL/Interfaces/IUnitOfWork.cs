@@ -13,7 +13,7 @@ namespace NLayerCasesStore.DAL.Interfaces
         IBasketRepository Baskets { get; }
         IRepository<OrderDataModel> Orders { get; }
         IUserRepository<UserDataModel> Users { get; }
-        IRepository<CaseDataModel> Cases { get; }
+        ICaseRepository<CaseDataModel> Cases { get; }
         void Save();
     }
 }

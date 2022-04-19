@@ -25,6 +25,10 @@ namespace NLayerCasesStore.WEBMVC.Controllers
         }
         public IActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewBag.Message = User.FindFirst("Role").Value;
+            }
             return View();
         }
     }

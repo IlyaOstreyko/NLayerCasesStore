@@ -9,7 +9,7 @@ namespace NLayerCasesStore.BLL.Interfaces
     public interface IUnitOfWorkService 
     {
         IBasketService Baskets { get; }
-        //IOrderService Orders { get; }
+        IOrderService Orders { get; }
         IUserService Users { get; }
         ICaseService Cases { get; }
     }

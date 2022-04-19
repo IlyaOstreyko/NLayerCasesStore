@@ -3,5 +3,14 @@
 }
 <h2>Menu</h2>
 <a asp-action="Register" asp-controller="Account">Registeration</a>
+<br>
 <a asp-action="Login" asp-controller="Account">Login</a>
-<a asp-action="AllCases" asp-controller="Case">AllCases</a>
+<br>
+<a asp-action="AllCases" asp-controller="Case">All Cases</a>
+<br>
+@if (ViewBag.Message == "admin")
+{
+    <a asp-action="AllOrders" asp-controller="Order">All Orders</a>
+    <br>
+    <a asp-action="AllCloseOrders" asp-controller="Order">All Close Orders</a>
+}

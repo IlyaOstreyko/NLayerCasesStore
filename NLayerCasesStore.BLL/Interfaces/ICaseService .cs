@@ -12,6 +12,8 @@ namespace NLayerCasesStore.BLL.Interfaces
         //void MakeOrder(CaseDTO caseDto);
         CaseDTO GetCase(int id);
         IEnumerable<CaseDTO> GetCases();
+        IEnumerable<CaseDTO> GetCasesInBasketFromEmail(string email);
+        IEnumerable<CaseDTO> GetCasesInBasketInStock(string email);
         void CreateCase(CaseDTO caseDto);
         void DeleteCase(int id);
         void UpdateCase(CaseDTO caseDto);

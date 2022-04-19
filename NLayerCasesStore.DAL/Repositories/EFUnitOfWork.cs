@@ -51,7 +51,7 @@ namespace NLayerCasesStore.DAL.Repositories
                 return basketRepository;
             }
         }
-        public IRepository<CaseDataModel> Cases
+        public ICaseRepository<CaseDataModel> Cases
         {
             get
             {
