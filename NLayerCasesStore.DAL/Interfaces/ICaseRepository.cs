@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLayerCasesStore.DAL.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace NLayerCasesStore.DAL.Interfaces
         IEnumerable<T> GetAll();
         IEnumerable<T> GetCasesInBasketFromEmail(string email);
         IEnumerable<T> GetCasesInBasketInStock(string email);
+        IEnumerable<BasketCaseDataModel> GetBasketCasesFromEmail(string email);
         T Get(int id);
         void Create(T item);
         void Update(T item);

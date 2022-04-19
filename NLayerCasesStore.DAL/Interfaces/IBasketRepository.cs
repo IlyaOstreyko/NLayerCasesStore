@@ -9,6 +9,8 @@ namespace NLayerCasesStore.DAL.Interfaces
 {
     public interface IBasketRepository
     {
+        bool CheckCaseInBasket(int idUser, CaseDataModel caseDM);
+        void AddNumberCaseInBasket(int idUser, CaseDataModel caseDM);
         void AddCaseInBasket(int idUser, CaseDataModel caseDM);
         void RemoveCaseFromBasket(int idUser, int caseId);
         void ClearBasket(int idUser);

@@ -6,6 +6,8 @@ using NLayerCasesStore.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -51,7 +53,10 @@ namespace NLayerCasesStore.BLL.Services
             {
                 var casesDM = _mapper.Map<IEnumerable<CaseDataModel>>(casesDto);
                 _unitOfWork.Orders.Create(userEmail, address, casesDM);
+                SendMessage(userEmail, address);
+
                 _unitOfWork.Save();
+
                 return true;
             }
 
@@ -63,6 +68,24 @@ namespace NLayerCasesStore.BLL.Services
             _unitOfWork.Orders.CloseOrder(id.Value);
             _unitOfWork.Save();
 
+        }
+        public void SendMessage(string userEmail, string address)
+        {
+            MailAddress store = new MailAddress("ilyaostreyko@gmail.com", "CasesStore");
+            MailAddress user = new MailAddress(userEmail);
+            MailMessage messageForUser = new MailMessage(store, user);
+            messageForUser.Subject = "you are created order";
+            messageForUser.Body = "<h2>Adress: </h2>" + address;
+            messageForUser.IsBodyHtml = true;
+            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+            smtp.Credentials = new NetworkCredential("ilyaostreyko@gmail.com", "zuohczqizfkoojai");
+            smtp.EnableSsl = true;
+            smtp.Send(messageForUser);
+            MailMessage messageForAdmin = new MailMessage(user, store);
+            messageForAdmin.Subject = "create order";
+            messageForAdmin.Body = "<h2>user: </h2>" + userEmail + "<h2>Adress: </h2>" + address;
+            messageForAdmin.IsBodyHtml = true;
+            smtp.Send(messageForAdmin);
         }
 
     }

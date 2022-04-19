@@ -26,7 +26,17 @@ namespace NLayerCasesStore.BLL.Services
         {
             var idUser = _unitOfWork.Users.GetIdOnEmail(userEmail);
             var caseDM = _mapper.Map<CaseDataModel>(caseDto);
-            _unitOfWork.Baskets.AddCaseInBasket(idUser, caseDM);
+
+            if (_unitOfWork.Baskets.CheckCaseInBasket(idUser, caseDM))
+            {
+                _unitOfWork.Baskets.AddNumberCaseInBasket(idUser, caseDM);
+            }
+
+            else
+            {
+                _unitOfWork.Baskets.AddCaseInBasket(idUser, caseDM);
+            }
+            
             _unitOfWork.Save();
         }
 

@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿
+using System.Collections.Generic;
 
 namespace NLayerCasesStore.DAL.DataModels
 {
@@ -8,5 +7,6 @@ namespace NLayerCasesStore.DAL.DataModels
     {
         public int BasketId { get; set; }
         public int? UserId { get; set; }
+        public List<BasketCaseDataModel> BasketsCases { get; set; } = new List<BasketCaseDataModel>();
     }
 }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<NLayerCasesStore.WEBMVC.ModelsView.BasketCaseViewModel>
+﻿@model IEnumerable<NLayerCasesStore.WEBMVC.ModelsView.CaseViewModel>
 @{
     ViewBag.Title = "AllCases";
 }
@@ -10,16 +10,15 @@
         <th>Color</th>
         <th>Price</th>
         <th>Store availability</th>
-        <th>Count case in basket</th>
     </tr>
     @foreach (var item in Model)
     {
         <tr>
-            <td>@item.Case.Company</td>
-            <td>@item.Case.Model</td>
-            <td>@item.Case.Color</td>
-            <td>@item.Case.Price</td>
-            @if(item.Case.CasesNumber > 0)
+            <td>@item.Company</td>
+            <td>@item.Model</td>
+            <td>@item.Color</td>
+            <td>@item.Price</td>
+            @if(item.CasesNumber > 0)
             {
             <td>"in stock"</td>
             }
@@ -30,7 +29,6 @@
             <td>
                 <a asp-action="DeleteCaseFromBasket" asp-controller="Basket" asp-route-id="@item.CaseId">Delete case from basket</a>
             </td>
-            <td>@item.NumberPairBasketCase</td>
         </tr>
     }
 </table>
