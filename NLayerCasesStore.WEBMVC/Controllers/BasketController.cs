@@ -43,10 +43,11 @@ namespace NLayerCasesStore.WEBMVC.Controllers
         public IActionResult AllCasesInBasket()
         {
             var userEmail = User.FindFirst(ClaimTypes.Email).Value;
-            var casesDto = _iUnitOfWorkService.Cases.GetCasesInBasketFromEmail(userEmail);
-            var casesDM = _mapper.Map<IEnumerable<CaseViewModel>>(casesDto);
-
-            return View(casesDM.ToList());
+            //var casesDto = _iUnitOfWorkService.Cases.GetCasesInBasketFromEmail(userEmail);
+            //var casesDM = _mapper.Map<IEnumerable<CaseViewModel>>(casesDto);
+            var basketCasesDto = _iUnitOfWorkService.Cases.GetBasketCasesFromEmail(userEmail);
+            var basketCasesDM = _mapper.Map<IEnumerable<BasketCaseViewModel>>(basketCasesDto);
+            return View(basketCasesDM.ToList());
         }
 
         public IActionResult DeleteCaseFromBasket(int? id)

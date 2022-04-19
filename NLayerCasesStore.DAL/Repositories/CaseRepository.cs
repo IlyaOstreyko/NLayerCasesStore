@@ -44,7 +44,25 @@ namespace NLayerCasesStore.DAL.Repositories
             }
             var cases = user.Basket.Cases;
             var casesDM = _mapper.Map<IEnumerable<CaseDataModel>>(cases);
+
             return casesDM;
+        }
+        public IEnumerable<BasketCaseDataModel> GetBasketCasesFromEmail(string email)
+        {
+            var user = _casesStoreContext.Users
+                .Include(a => a.Basket)
+                .ThenInclude(b => b.Cases)
+                .ThenInclude(b => b.BasketsCases)
+                .FirstOrDefault(u => u.UserMail == email);
+            if (user.Basket is null)
+            {
+                user.Basket = new Basket { UserId = user.UserId };
+                _casesStoreContext.Baskets.Add(user.Basket);
+            }
+            var basketCases = user.Basket.BasketsCases;
+            var basketCasesDM = _mapper.Map<IEnumerable<BasketCaseDataModel>>(basketCases);
+
+            return basketCasesDM;
         }
 
         public CaseDataModel Get(int id)
