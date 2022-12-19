@@ -26,14 +26,14 @@ namespace NLayerCasesStore.DAL.Repositories
         {
             var basket = _casesStoreContext.Baskets.Include(a => a.BasketsCases.Where(a => a.CaseId == caseDM.CaseId))
                 .FirstOrDefault(b => b.UserId == idUser);
-            basket.BasketsCases[0].NumberPairBasketCase++;
+            basket.BasketsCases[0].CountCasesInBasket++;
         }
         public bool CheckCaseInBasket(int idUser, CaseDataModel caseDM)
         {
             var basket = _casesStoreContext.Baskets.Include(a => a.BasketsCases.Where(a => a.CaseId == caseDM.CaseId))
                 .FirstOrDefault(b => b.UserId == idUser);
 
-            if (basket.BasketsCases.Any() && basket.BasketsCases[0].NumberPairBasketCase > 0 )
+            if (basket is not null && basket.BasketsCases.Any() && basket.BasketsCases[0].CountCasesInBasket > 0 )
             {
                 return true;
             }

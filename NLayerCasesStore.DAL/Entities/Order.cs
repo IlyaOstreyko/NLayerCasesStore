@@ -17,5 +17,6 @@ namespace NLayerCasesStore.DAL.Entities
         [ForeignKey("UserId")]
         public User User { get; set; }
         public List<Case> Cases { get; set; } = new List<Case>();
+        public List<OrderCase> OrdersCases { get; set; } = new List<OrderCase>();
     }
 }

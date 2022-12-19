@@ -12,5 +12,6 @@ namespace NLayerCasesStore.DAL.DataModels
         public int Price { get; set; }
         public int CasesNumber { get; set; }
         public List<BasketCaseDataModel> BasketsCases { get; set; } = new List<BasketCaseDataModel>();
+        public List<OrderCaseDataModel> OrdersCases { get; set; } = new List<OrderCaseDataModel>();
     }
 }

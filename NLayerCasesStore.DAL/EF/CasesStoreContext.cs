@@ -11,7 +11,7 @@ namespace NLayerCasesStore.DAL.EF
         public DbSet<User> Users { get; set; }
 
         public CasesStoreContext(DbContextOptions<CasesStoreContext> options)
-            : base(options) 
+            : base(options)
         {
             Database.EnsureCreated();
         }
@@ -32,9 +32,29 @@ namespace NLayerCasesStore.DAL.EF
                     .HasForeignKey(pt => pt.BasketId),
                 j =>
                 {
-                    j.Property(pt => pt.NumberPairBasketCase).HasDefaultValue(1);
+                    j.Property(pt => pt.CountCasesInBasket).HasDefaultValue(1);
                     j.HasKey(t => new { t.BasketId, t.CaseId });
                     j.ToTable("BasketsCases");
+                });
+
+            modelBuilder
+                .Entity<Order>()
+                .HasMany(c => c.Cases)
+                .WithMany(s => s.Orders)
+                .UsingEntity<OrderCase>(
+                j => j
+                .HasOne(pt => pt.Case)
+                .WithMany(t => t.OrdersCases)
+                .HasForeignKey(pt => pt.CaseId),
+                j => j
+                .HasOne(pt => pt.Order)
+                .WithMany(p => p.OrdersCases)
+                .HasForeignKey(pt => pt.OrderId),
+                j =>
+                {
+                    j.Property(pt => pt.CountCaseInOrder).HasDefaultValue(1);
+                    j.HasKey(t => new { t.OrderId, t.CaseId });
+                    j.ToTable("OrdersCases");
                 });
         }
         //static CasesStoreContext()

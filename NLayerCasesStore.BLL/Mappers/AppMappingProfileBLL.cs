@@ -18,6 +18,7 @@ namespace NLayerCasesStore.BLL.Mappers
             CreateMap<OrderDataModel, OrderDTO>().ReverseMap();
             CreateMap<UserDataModel, UserDTO>().ReverseMap();
             CreateMap<BasketCaseDataModel, BasketCaseDTO>().ReverseMap();
+            CreateMap<OrderCaseDataModel, OrderCaseDTO>().ReverseMap();
         }
     }
 }
