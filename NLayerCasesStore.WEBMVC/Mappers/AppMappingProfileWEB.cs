@@ -13,6 +13,8 @@ namespace NLayerCasesStore.WEBMVC.Mappers
             CreateMap<OrderDTO, OrderViewModel>().ReverseMap();
             CreateMap<UserDTO, UserViewModel>().ReverseMap();
             CreateMap<UserDTO, RegisterModel>().ReverseMap();
+            CreateMap<BasketCaseDTO, BasketCaseViewModel>().ReverseMap();
+            CreateMap<OrderCaseDTO, OrderCaseViewModel>().ReverseMap();
         }
     }
 }

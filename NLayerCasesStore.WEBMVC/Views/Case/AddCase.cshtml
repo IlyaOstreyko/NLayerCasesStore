@@ -7,27 +7,27 @@
     <div>
         <div>
             <label asp-for="Company">Company</label><br />
-            <input type="text" asp-for="Company" />
+            <input type="text" asp-for="Company" required="enter Company"/>
             <span asp-validation-for="Company" />
         </div>
         <div>
             <label asp-for="Model">Model</label><br />
-            <input type="text" asp-for="Model" />
+            <input type="text" asp-for="Model" required="enter Model"/>
             <span asp-validation-for="Model" />
         </div>
         <div>
             <label asp-for="Color">Color</label><br />
-            <input asp-for="Color" />
+            <input type="text" asp-for="Color" required="enter Color"/>
             <span asp-validation-for="Color" />
         </div>
         <div>
             <label asp-for="Price">Price</label><br />
-            <input asp-for="Price" />
+            <input type="number" asp-for="Price" required="enter Price" min="0" max="9999"/>
             <span asp-validation-for="Price" />
         </div>
         <div>
             <label asp-for="CasesNumber">CasesNumber</label><br />
-            <input asp-for="CasesNumber" />
+            <input type="number" asp-for="CasesNumber" required="enter CasesNumber" min="0" step="1" max="9999"/>
             <span asp-validation-for="CasesNumber" />
         </div>
         <div>

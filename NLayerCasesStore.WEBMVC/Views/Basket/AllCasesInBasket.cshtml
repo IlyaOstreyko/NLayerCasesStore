@@ -1,0 +1,43 @@
+﻿@model IEnumerable<NLayerCasesStore.WEBMVC.ModelsView.BasketCaseViewModel>
+@{
+    ViewBag.Title = "AllCases";
+}
+<a asp-action="AddOrder" asp-controller="Order">Add order</a>
+<table class="table">
+    <tr>
+        <th>Company</th>
+        <th>Model</th>
+        <th>Color</th>
+        <th>Price</th>
+        <th>Store availability</th>
+        <th>Count case in basket</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Case.Company</td>
+            <td>@item.Case.Model</td>
+            <td>@item.Case.Color</td>
+            <td>@item.Case.Price</td>
+            @if(item.Case.CasesNumber > 0)
+            {
+            <td>"in stock"</td>
+            }
+            else
+            {
+            <td>not available</td>
+            }
+            <td>
+                <a asp-action="DeleteCaseFromBasket" asp-controller="Basket" asp-route-id="@item.CaseId">Delete case from basket</a>
+            </td>
+            <td>@item.CountCasesInBasket</td>
+        </tr>
+    }
+</table>
+<div>
+    <form asp-controller="Basket" asp-action="ClearBasket" method="post">
+        <div class="form-group">
+            <input type="submit" class="btn btn-default" value="Clear Basket" />
+        </div>
+    </form>
+</div>

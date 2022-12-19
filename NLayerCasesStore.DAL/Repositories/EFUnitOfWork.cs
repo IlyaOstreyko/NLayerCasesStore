@@ -32,25 +32,34 @@ namespace NLayerCasesStore.DAL.Repositories
             get
             {
                 if (userRepository == null)
+                {
                     userRepository = new UserRepository(_casesStoreContext, _mapper);
+                }
+
                 return userRepository;
             }
         }
-        public IRepository<BasketDataModel> Baskets
+        public IBasketRepository Baskets
         {
             get
             {
                 if (basketRepository == null)
+                {
                     basketRepository = new BasketRepository(_casesStoreContext, _mapper);
+                }
+                    
                 return basketRepository;
             }
         }
-        public IRepository<CaseDataModel> Cases
+        public ICaseRepository<CaseDataModel> Cases
         {
             get
             {
                 if (caseRepository == null)
+                {
                     caseRepository = new CaseRepository(_casesStoreContext, _mapper);
+                }
+                    
                 return caseRepository;
             }
         }
@@ -60,7 +69,10 @@ namespace NLayerCasesStore.DAL.Repositories
             get
             {
                 if (orderRepository == null)
+                {
                     orderRepository = new OrderRepository(_casesStoreContext, _mapper);
+                }
+                    
                 return orderRepository;
             }
         }

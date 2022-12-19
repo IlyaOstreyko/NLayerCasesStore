@@ -13,24 +13,35 @@ namespace NLayerCasesStore.WEBMVC
                 context.Cases.AddRange(
                     new Case
                     {
+                        Model = "iPhone XR",
+                        Company = "Apple",
+                        Color = "Grow",
+                        Price = 13,
+                        CasesNumber = 5
+                    }
+                    , new Case
+                    {
                         Model = "iPhone X",
                         Company = "Apple",
                         Color = "Green",
-                        Price = 15
+                        Price = 15,
+                        CasesNumber = 5
                     },
                     new Case
                     {
                         Model = "iPhone 7",
                         Company = "Apple",
                         Color = "Black",
-                        Price = 17
+                        Price = 17,
+                        CasesNumber = 5
                     },
                     new Case
                     {
                         Model = "iPhone 8",
                         Company = "Apple",
                         Color = "Yellow",
-                        Price = 16
+                        Price = 16,
+                        CasesNumber = 5
                     }
                 );
                 context.SaveChanges();
@@ -48,7 +59,7 @@ namespace NLayerCasesStore.WEBMVC
                     new User
                     {
                         UserName = "user",
-                        UserMail = "ilyaostreyko@gmail.com",
+                        UserMail = "ilya.ostreyko.96@mail.ru",
                         UserPassword = "user",
                         UserRole = "user"
                     }

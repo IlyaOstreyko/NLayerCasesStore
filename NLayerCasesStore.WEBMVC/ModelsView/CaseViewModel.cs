@@ -14,5 +14,7 @@ namespace NLayerCasesStore.WEBMVC.ModelsView
         public string Color { get; set; }
         public int Price { get; set; }
         public int CasesNumber { get; set; }
+        public List<BasketCaseViewModel> BasketsCases { get; set; } = new List<BasketCaseViewModel>();
+        public List<OrderCaseViewModel> OrdersCases { get; set; } = new List<OrderCaseViewModel>();
     }
 }

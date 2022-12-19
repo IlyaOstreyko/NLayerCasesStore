@@ -13,86 +13,97 @@ namespace NLayerCasesStore.WEBMVC.Controllers
 {
     public class AccountController : Controller
     {
-        public IUserService _userService;
-        public readonly IMapper _mapper;
+        private readonly IUnitOfWorkService _iUnitOfWorkService;
+        private readonly IMapper _mapper;
 
-        public AccountController(IUserService userService, IMapper mapper)
+        public AccountController(IUnitOfWorkService iUnitOfWorkService, IMapper mapper)
         {
-            _userService = userService;
+            _iUnitOfWorkService = iUnitOfWorkService;
             _mapper = mapper;
         }
+
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
             if (ModelState.IsValid)
             {
-                var userDTO = _userService.GetUserOnEmailAndPassword(model.Email, model.Password);
-                if (userDTO != null)
+                var userDTO = _iUnitOfWorkService.Users.GetUserOnEmailAndPassword(model.UserMail, model.UserPassword);
+
+                if (userDTO != null && userDTO.UserMail != null)
                 {
                     await Authenticate(userDTO.UserMail,userDTO.UserRole);
 
                     return RedirectToAction("Index", "Home");
                 }
+
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
+
             return View(model);
         }
+
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
         {
-            if (ModelState.IsValid)
+            var isValidLogin = !_iUnitOfWorkService.Users.CheckLogin(model.UserName);
+            var isValidEmail = !_iUnitOfWorkService.Users.CheckEmail(model.UserMail);
+
+            if (ModelState.IsValid && isValidEmail && isValidLogin)
             {
-                if (!_userService.CheckEmail(model.Email))
-                {
-                    if (!_userService.CheckLogin(model.Login))
-                    {
-                        var userDto = _mapper.Map<UserDTO>(model);
-                        _userService.CreateUser(userDto);
-                        await Authenticate(userDto.UserMail, userDto.UserRole);
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Некорректный логин");
-                    }
-                        
-                    
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Некорректный email");
-                }
-                    
+                var userDto = _mapper.Map<UserDTO>(model);
+                _iUnitOfWorkService.Users.CreateUser(userDto);
+                userDto.UserRole = "user";
+                await Authenticate(userDto.UserMail, userDto.UserRole);
+
+                return RedirectToAction("Index", "Home");               
+
             }
+
+            if (!isValidLogin)
+            {
+                ModelState.AddModelError("", "Некорректный логин");
+            }
+
+            if (!isValidEmail)
+            {
+                ModelState.AddModelError("", "Некорректный email");
+            }
+
             return View(model);
         }
 
-        private async Task Authenticate(string userName, string userRole)
+        private async Task Authenticate(string userEmail, string userRole)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, userRole)
+                new Claim(ClaimTypes.Email, userEmail),
+                new Claim("Role", userRole)
             };
-            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+
+            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie",
+                ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(id));
         }
 
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
             return RedirectToAction("Login", "Account");
         }
     }

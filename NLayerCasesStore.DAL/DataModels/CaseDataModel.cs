@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿
+using System.Collections.Generic;
 
 namespace NLayerCasesStore.DAL.DataModels
 {
@@ -12,5 +11,7 @@ namespace NLayerCasesStore.DAL.DataModels
         public string Color { get; set; }
         public int Price { get; set; }
         public int CasesNumber { get; set; }
+        public List<BasketCaseDataModel> BasketsCases { get; set; } = new List<BasketCaseDataModel>();
+        public List<OrderCaseDataModel> OrdersCases { get; set; } = new List<OrderCaseDataModel>();
     }
 }

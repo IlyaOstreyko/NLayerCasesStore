@@ -9,8 +9,9 @@ namespace NLayerCasesStore.DAL.Entities
         [Required, Key]
         public int BasketId { get; set; }
         public int? UserId { get; set; }
-        [ForeignKey("UserId")]
+        [ForeignKey("UserId")] 
         public User User { get; set; }
-        public virtual List<Case> Cases { get; set; }
+        public List<Case> Cases { get; set; } = new List<Case>();
+        public List<BasketCase> BasketsCases { get; set; } = new List<BasketCase>();
     }
 }

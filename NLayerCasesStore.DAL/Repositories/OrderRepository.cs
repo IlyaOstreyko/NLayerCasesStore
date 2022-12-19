@@ -14,7 +14,7 @@ namespace NLayerCasesStore.DAL.Repositories
 {
     public class OrderRepository : IRepository<OrderDataModel>
     {
-        private CasesStoreContext _casesStoreContext;
+        private readonly CasesStoreContext _casesStoreContext;
         private readonly IMapper _mapper;
 
         public OrderRepository(CasesStoreContext casesStoreContext, IMapper mapper)
@@ -30,6 +30,27 @@ namespace NLayerCasesStore.DAL.Repositories
 
             return ordersDM;
         }
+        public IEnumerable<OrderDataModel> GetUserOrders(string userEmail, string status)
+        {
+            if (userEmail == "all")
+            {
+                var orders = _casesStoreContext.Orders.Where(a => a.Status == status)
+                    .Include(o => o.Cases);
+
+                var ordersDM = _mapper.Map<IEnumerable<OrderDataModel>>(orders);
+                return ordersDM;
+            }
+            else
+            {
+                var user = _casesStoreContext.Users
+                .Include(o => o.Orders.Where(a => a.Status == status))
+                .ThenInclude(o => o.Cases)
+                .FirstOrDefault(u => u.UserMail == userEmail);
+
+                var ordersDM = _mapper.Map<IEnumerable<OrderDataModel>>(user.Orders);
+                return ordersDM;
+            }
+        }
 
         public OrderDataModel Get(int id)
         {
@@ -39,15 +60,44 @@ namespace NLayerCasesStore.DAL.Repositories
             return orderDM;
         }
 
-        public void Create(OrderDataModel orderDM)
+        public void Create(string userEmail, string address, IEnumerable<CaseDataModel> casesDM)
         {
-            //var order = new Order
-            //{
-            //    Address = orderDM.Address,
-            //    Status = orderDM.Status,
-            //    UserId = orderDM.UserId
-            //};
-            var order = _mapper.Map<Order>(orderDM);
+            _casesStoreContext.ChangeTracker.Clear();
+            var user = _casesStoreContext.Users
+                .Include(o => o.Basket)
+                .ThenInclude(o => o.Cases.Where(c => c.CasesNumber > 0))
+                .ThenInclude(o => o.BasketsCases)
+                .FirstOrDefault(u => u.UserMail == userEmail);
+
+            var cases = user.Basket.Cases;
+            var ordersCases = new List<OrderCase>() { };
+            foreach (var caseItem in cases)
+            {
+                var orderCase = caseItem.BasketsCases.Where(a => a.CaseId == caseItem.CaseId).ToList();
+                int countCase = orderCase[0].CountCasesInBasket;
+                if(countCase > caseItem.CasesNumber)
+                {
+                    countCase = caseItem.CasesNumber;
+                }
+                ordersCases.Add(new OrderCase() 
+                {
+                    Case = caseItem,
+                    CountCaseInOrder = countCase,
+                });
+
+                caseItem.CasesNumber -= countCase;
+            }
+            
+            var order = new Order 
+            { 
+                Address = address, 
+                OrdersCases = ordersCases, 
+                DataOrder = DateTime.Now, 
+                User = user, Status = "open" 
+            };
+
+            user.Basket.Cases.Clear();
+
             _casesStoreContext.Orders.Add(order);
         }
 
@@ -56,15 +106,25 @@ namespace NLayerCasesStore.DAL.Repositories
             var order = _mapper.Map<Order>(orderDM);
             _casesStoreContext.Entry(order).State = EntityState.Modified;
         }
-        //public IEnumerable<OrderDataModel> Find(Func<Order, bool> predicate)
-        //{
-        //    return _casesStoreContext.Orders.Include(o => o.Cases).Where(predicate).ToList();
-        //}
         public void Delete(int id)
         {
             Order order = _casesStoreContext.Orders.Find(id);
+
             if (order != null)
+            {
                 _casesStoreContext.Orders.Remove(order);
+            }
+        }
+        public void CloseOrder(int? id)
+        {
+            _casesStoreContext.ChangeTracker.Clear();
+            Order order = _casesStoreContext.Orders.Find(id);
+
+            if (order != null)
+            {
+                order.Status = "close";
+                order.DataClose = DateTime.Now;
+            }
         }
     }
 }

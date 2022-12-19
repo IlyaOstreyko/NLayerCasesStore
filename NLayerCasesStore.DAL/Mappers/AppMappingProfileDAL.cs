@@ -16,8 +16,9 @@ namespace NLayerCasesStore.DAL.Mappers
             CreateMap<Case, CaseDataModel>().ReverseMap();
             CreateMap<Basket, BasketDataModel>().ReverseMap();
             CreateMap<Order, OrderDataModel>().ReverseMap();
-            CreateMap<User, UserDataModel>()
-                .ReverseMap();
+            CreateMap<User, UserDataModel>().ReverseMap();
+            CreateMap<BasketCase, BasketCaseDataModel>().ReverseMap();
+            CreateMap<OrderCase, OrderCaseDataModel>().ReverseMap();
         }
     }
 }

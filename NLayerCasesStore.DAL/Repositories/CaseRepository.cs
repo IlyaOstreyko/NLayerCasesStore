@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace NLayerCasesStore.DAL.Repositories
 {
-    public class CaseRepository : IRepository<CaseDataModel>
+    public class CaseRepository : ICaseRepository<CaseDataModel>
     {
-        private CasesStoreContext _casesStoreContext;
+        private readonly CasesStoreContext _casesStoreContext;
         private readonly IMapper _mapper;
 
         public CaseRepository(CasesStoreContext casesStoreContext, IMapper mapper)
@@ -25,11 +25,46 @@ namespace NLayerCasesStore.DAL.Repositories
 
         public IEnumerable<CaseDataModel> GetAll()
         {
-            var cases = _casesStoreContext.Cases.ToList();
+            var cases = _casesStoreContext.Cases.AsNoTracking().ToList();
             var casesDM = _mapper.Map<IEnumerable<CaseDataModel>>(cases);
 
             return casesDM;
         }
+
+        public IEnumerable<CaseDataModel> GetCasesInBasketFromEmail(string email)
+        {
+            var user = _casesStoreContext.Users
+                .Include(a => a.Basket)
+                .ThenInclude(b => b.Cases)
+                .FirstOrDefault(u => u.UserMail == email);
+            if(user.Basket is null)
+            {
+                user.Basket = new Basket { UserId = user.UserId };
+                _casesStoreContext.Baskets.Add(user.Basket);
+            }
+            var cases = user.Basket.Cases;
+            var casesDM = _mapper.Map<IEnumerable<CaseDataModel>>(cases);
+
+            return casesDM;
+        }
+        public IEnumerable<BasketCaseDataModel> GetBasketCasesFromEmail(string email)
+        {
+            var user = _casesStoreContext.Users
+                .Include(a => a.Basket)
+                .ThenInclude(b => b.Cases)
+                .ThenInclude(b => b.BasketsCases)
+                .FirstOrDefault(u => u.UserMail == email);
+            if (user.Basket is null)
+            {
+                user.Basket = new Basket { UserId = user.UserId };
+                _casesStoreContext.Baskets.Add(user.Basket);
+            }
+            var basketCases = user.Basket.BasketsCases;
+            var basketCasesDM = _mapper.Map<IEnumerable<BasketCaseDataModel>>(basketCases);
+
+            return basketCasesDM;
+        }
+
         public CaseDataModel Get(int id)
         {
             var caseItem = _casesStoreContext.Cases.Find(id);
@@ -38,40 +73,41 @@ namespace NLayerCasesStore.DAL.Repositories
             return caseDM;
         }
 
-        public void Create(CaseDataModel itemCaseDM)
+        public void Create(CaseDataModel caseDM)
         {
-            //var itemCase = new Case
-            //{
-            //    Company = itemCaseDM.Company,
-            //    Model = itemCaseDM.Model,
-            //    Color = itemCaseDM.Color,
-            //    Price = itemCaseDM.Price,
-            //    CasesNumber = itemCaseDM.CasesNumber
-            //};
-            var itemCase = _mapper.Map<Case>(itemCaseDM);
+            var itemCase = _mapper.Map<Case>(caseDM);
             _casesStoreContext.Cases.Add(itemCase);
         }
 
-        public void Update(CaseDataModel itemCaseDM)
+        public void Update(CaseDataModel caseDM)
         {
-            var itemCase = _mapper.Map<Case>(itemCaseDM);
+            var itemCase = _mapper.Map<Case>(caseDM);
             _casesStoreContext.Entry(itemCase).State = EntityState.Modified;
         }
-        //public IEnumerable<CaseDataModel> Find(Func<CaseDataModel, bool> predicate)
-        //{
-        //    var cases = _casesStoreContext.Cases.Where(predicate).ToList();
-        //    var casesDM = _mapper.Map<IEnumerable<CaseDataModel>>(cases);
-
-        //    return casesDM;
-        //    //return _casesStoreContext.Cases.Where(predicate).ToList();
-        //}
         public void Delete(int id)
         {
             Case itemcase = _casesStoreContext.Cases.Find(id);
+
             if (itemcase != null)
             {
                 _casesStoreContext.Cases.Remove(itemcase);
             } 
+        }
+
+        public IEnumerable<CaseDataModel> GetCasesInBasketInStock(string email)
+        {
+            var user = _casesStoreContext.Users
+                .Include(x => x.Basket).ThenInclude(y => y.Cases)
+                .FirstOrDefault(u => u.UserMail == email);
+            if (user.Basket.Cases is null)
+            {
+                var nullCases = new List<CaseDataModel>();
+                return nullCases;
+            }
+            var cases = user.Basket.Cases.Where(c => c.CasesNumber > 0);
+            var casesDM = _mapper.Map<IEnumerable<CaseDataModel>>(cases);
+
+            return casesDM;
         }
     }
 }

@@ -1,0 +1,39 @@
+﻿@model IEnumerable<NLayerCasesStore.WEBMVC.ModelsView.CaseViewModel>
+@{
+    ViewBag.Title = "Create order";
+}
+<h2>Create order</h2>
+<form method="post">
+
+    <input type="text" name="address" required placeholder="Enter address" />
+    <input type="submit" value="Send" />
+</form>
+<p >
+    <b>
+        <div class="validation" asp-validation-summary="ModelOnly" style="color:#ff0000"></div>
+    </b>
+</p>
+<h2>Selected cases in stock</h2>
+<table class="table">
+    <tr>
+        <th>Company</th>
+        <th>Model</th>
+        <th>Color</th>
+        <th>Price</th>
+        <th>Store availability</th>
+    </tr>
+    @if (Model != null)
+    {
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Company</td>
+                <td>@item.Model</td>
+                <td>@item.Color</td>
+                <td>@item.Price</td>
+                <td>in stock</td>
+            </tr>
+        }
+    }
+
+</table>

@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace NLayerCasesStore.DAL.Repositories
 {
-    public class BasketRepository : IRepository<BasketDataModel>
+    internal class BasketRepository : IBasketRepository
     {
-        private CasesStoreContext _casesStoreContext;
+        private readonly CasesStoreContext _casesStoreContext;
         private readonly IMapper _mapper;
 
         public BasketRepository(CasesStoreContext casesStoreContext, IMapper mapper)
@@ -22,42 +22,68 @@ namespace NLayerCasesStore.DAL.Repositories
             _casesStoreContext = casesStoreContext;
             _mapper = mapper;
         }
-
-        public IEnumerable<BasketDataModel> GetAll()
+        public void AddNumberCaseInBasket(int idUser, CaseDataModel caseDM)
         {
-            var baskets = _casesStoreContext.Baskets.Include(o => o.Cases);
-            var basketsDM = _mapper.Map<IEnumerable<BasketDataModel>>(baskets);
-            return basketsDM;
+            var basket = _casesStoreContext.Baskets.Include(a => a.BasketsCases.Where(a => a.CaseId == caseDM.CaseId))
+                .FirstOrDefault(b => b.UserId == idUser);
+            basket.BasketsCases[0].CountCasesInBasket++;
+        }
+        public bool CheckCaseInBasket(int idUser, CaseDataModel caseDM)
+        {
+            var basket = _casesStoreContext.Baskets.Include(a => a.BasketsCases.Where(a => a.CaseId == caseDM.CaseId))
+                .FirstOrDefault(b => b.UserId == idUser);
+
+            if (basket is not null && basket.BasketsCases.Any() && basket.BasketsCases[0].CountCasesInBasket > 0 )
+            {
+                return true;
+            }
+            return false;
         }
 
-        public BasketDataModel Get(int id)
+        public void AddCaseInBasket(int idUser, CaseDataModel caseDM)
         {
-            var basket = _casesStoreContext.Baskets.Find(id);
-            var basketDM = _mapper.Map<BasketDataModel>(basket);
+            //int count = _casesStoreContext.Cases.Local.Count;
+            _casesStoreContext.ChangeTracker.Clear();
+            //count = _casesStoreContext.Cases.Local.Count;
 
-            return basketDM;
+            //var itemCase = _mapper.Map<Case>(caseDM);
+            var itemCase = _casesStoreContext.Cases.Find(caseDM.CaseId);
+            var basket = _casesStoreContext.Baskets.FirstOrDefault(b => b.UserId == idUser);
+
+            if (basket is null)
+            {
+                basket = new Basket { UserId = idUser };
+                _casesStoreContext.Baskets.Add(basket);
+            }
+            basket.Cases.Add(itemCase);
+        }
+        public void RemoveCaseFromBasket(int idUser, int caseId)
+        {
+            var basket = _casesStoreContext.Baskets
+                .Include(a => a.Cases)
+                .FirstOrDefault(b => b.UserId == idUser);
+
+            var itemCase = basket.Cases.FirstOrDefault(x => x.CaseId == caseId);
+            basket.Cases.Remove(itemCase);
+        }
+        
+        public void ClearBasket(int idUser)
+        {
+            var basket = _casesStoreContext.Baskets
+                .Include(a => a.Cases)
+                .FirstOrDefault(b => b.UserId == idUser);
+
+            basket.Cases.Clear();
         }
 
-        public void Create(BasketDataModel itemBasketDM)
+        public void DeleteCasesInBasket(List<CaseDataModel> casesDM)
         {
-            var itemBasket = _mapper.Map<Basket>(itemBasketDM);
-            _casesStoreContext.Baskets.Add(itemBasket);
+            throw new NotImplementedException();
         }
 
-        public void Update(BasketDataModel itemBasketDM)
+        public List<CaseDataModel> GetCaseInBasket(int idUser)
         {
-            var itemBasket = _mapper.Map<Basket>(itemBasketDM);
-            _casesStoreContext.Entry(itemBasket).State = EntityState.Modified;
-        }
-        //public IEnumerable<BasketDataModel> Find(Func<BasketDataModel, bool> predicate)
-        //{
-        //    return _casesStoreContext.Baskets.Where(predicate).ToList();
-        //}
-        public void Delete(int id)
-        {
-            Basket itembasket = _casesStoreContext.Baskets.Find(id);
-            if (itembasket != null)
-                _casesStoreContext.Baskets.Remove(itembasket);
+            throw new NotImplementedException();
         }
     }
 }
