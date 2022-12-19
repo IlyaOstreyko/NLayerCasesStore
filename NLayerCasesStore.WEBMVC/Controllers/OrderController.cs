@@ -53,7 +53,6 @@ namespace NLayerCasesStore.WEBMVC.Controllers
             var userEmail = User.FindFirst(ClaimTypes.Email).Value;
             var ordersDto = _iUnitOfWorkService.Orders.GetUserOrders(userEmail, "open");
             var ordersDM = _mapper.Map<IEnumerable<OrderViewModel>>(ordersDto);
-
             return View(ordersDM.ToList());
         }
 

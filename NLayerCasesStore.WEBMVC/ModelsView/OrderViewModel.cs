@@ -11,6 +11,8 @@ namespace NLayerCasesStore.WEBMVC.ModelsView
         public DateTime? DataClose { get; set; }
         public string Status { get; set; }
         public int? UserId { get; set; }
-        public List<CaseViewModel> Cases { get; set; }
+        public int OrderPrice { get; set; }
+        public List<CaseViewModel> Cases { get; set; } = new List<CaseViewModel>();
+        public List<OrderCaseViewModel> OrdersCases { get; set; } = new List<OrderCaseViewModel>();
     }
 }

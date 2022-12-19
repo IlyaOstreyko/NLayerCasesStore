@@ -13,6 +13,7 @@ namespace NLayerCasesStore.DAL.DataModels
         public DateTime? DataClose { get; set; }
         public string Status { get; set; }
         public int? UserId { get; set; }
-        public List<CaseDataModel> Cases { get; set; }
+        public List<CaseDataModel> Cases { get; set; } = new List<CaseDataModel>();
+        public List<OrderCaseDataModel> OrdersCases { get; set; } = new List<OrderCaseDataModel>();
     }
 }

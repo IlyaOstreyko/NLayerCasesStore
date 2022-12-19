@@ -16,5 +16,6 @@ namespace NLayerCasesStore.DAL.Entities
         public List<Order> Orders { get; set; } = new List<Order>();
         public List<Basket> Baskets { get; set; } = new List<Basket>();
         public List<BasketCase> BasketsCases { get; set; } = new List<BasketCase>();
+        public List<OrderCase> OrdersCases { get; set; } = new List<OrderCase>();
     }
 }

@@ -10,6 +10,6 @@ namespace NLayerCasesStore.DAL.DataModels
         public int CaseId { get; set; }
         public CaseDataModel Case { get; set; }
 
-        public int NumberPairBasketCase { get; set; }
+        public int CountCasesInBasket { get; set; }
     }
 }

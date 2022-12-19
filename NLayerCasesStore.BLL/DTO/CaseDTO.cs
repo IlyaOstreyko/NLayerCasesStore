@@ -14,5 +14,6 @@ namespace NLayerCasesStore.BLL.DTO
         public int Price { get; set; }
         public int CasesNumber { get; set; }
         public List<BasketCaseDTO> BasketsCases { get; set; } = new List<BasketCaseDTO>();
+        public List<OrderCaseDTO> OrdersCases { get; set; } = new List<OrderCaseDTO>();
     }
 }

@@ -14,5 +14,6 @@ namespace NLayerCasesStore.BLL.DTO
         public string Status { get; set; }
         public int? UserId { get; set; }
         public List<CaseDTO> Cases { get; set; }
+        public List<OrderCaseDTO> OrdersCases { get; set; } = new List<OrderCaseDTO>();
     }
 }

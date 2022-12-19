@@ -28,8 +28,15 @@ namespace NLayerCasesStore.WEBMVC.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 ViewBag.Message = User.FindFirst("Role").Value;
+                return View();
             }
-            return View();
+
+            else
+            {
+                ViewBag.Message = "guest";
+                return View();
+            }
+
         }
     }
 }

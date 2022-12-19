@@ -36,6 +36,7 @@ namespace NLayerCasesStore.DAL.Repositories
             {
                 var orders = _casesStoreContext.Orders.Where(a => a.Status == status)
                     .Include(o => o.Cases);
+
                 var ordersDM = _mapper.Map<IEnumerable<OrderDataModel>>(orders);
                 return ordersDM;
             }
@@ -48,7 +49,7 @@ namespace NLayerCasesStore.DAL.Repositories
 
                 var ordersDM = _mapper.Map<IEnumerable<OrderDataModel>>(user.Orders);
                 return ordersDM;
-            }            
+            }
         }
 
         public OrderDataModel Get(int id)
@@ -64,19 +65,38 @@ namespace NLayerCasesStore.DAL.Repositories
             _casesStoreContext.ChangeTracker.Clear();
             var user = _casesStoreContext.Users
                 .Include(o => o.Basket)
-                .ThenInclude(o => o.Cases)
+                .ThenInclude(o => o.Cases.Where(c => c.CasesNumber > 0))
+                .ThenInclude(o => o.BasketsCases)
                 .FirstOrDefault(u => u.UserMail == userEmail);
 
-            var cases = user.Basket.Cases.Where(c => c.CasesNumber > 0);
-
-            var order = new Order { Address = address, Cases = cases.ToList(), DataOrder = DateTime.Now, User = user, Status = "open"};
-
-            foreach (var c in cases)
+            var cases = user.Basket.Cases;
+            var ordersCases = new List<OrderCase>() { };
+            foreach (var caseItem in cases)
             {
-                c.CasesNumber--;
-            }
+                var orderCase = caseItem.BasketsCases.Where(a => a.CaseId == caseItem.CaseId).ToList();
+                int countCase = orderCase[0].CountCasesInBasket;
+                if(countCase > caseItem.CasesNumber)
+                {
+                    countCase = caseItem.CasesNumber;
+                }
+                ordersCases.Add(new OrderCase() 
+                {
+                    Case = caseItem,
+                    CountCaseInOrder = countCase,
+                });
 
-            user.Basket.Cases.RemoveAll(b => b.CasesNumber > 0);
+                caseItem.CasesNumber -= countCase;
+            }
+            
+            var order = new Order 
+            { 
+                Address = address, 
+                OrdersCases = ordersCases, 
+                DataOrder = DateTime.Now, 
+                User = user, Status = "open" 
+            };
+
+            user.Basket.Cases.Clear();
 
             _casesStoreContext.Orders.Add(order);
         }
@@ -93,7 +113,7 @@ namespace NLayerCasesStore.DAL.Repositories
             if (order != null)
             {
                 _casesStoreContext.Orders.Remove(order);
-            }               
+            }
         }
         public void CloseOrder(int? id)
         {

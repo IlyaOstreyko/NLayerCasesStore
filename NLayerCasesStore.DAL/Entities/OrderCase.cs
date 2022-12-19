@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace NLayerCasesStore.DAL.Entities
 {
-    public class BasketCase
+    public class OrderCase
     {
-        public int BasketId { get; set; }
-        public Basket Basket { get; set; }
+        public int OrderId { get; set; }
+        public Order Order { get; set; }
 
         public int CaseId { get; set; }
         public Case Case { get; set; }
 
-        public int CountCasesInBasket { get; set; }
+        public int CountCaseInOrder { get; set; }
     }
 }

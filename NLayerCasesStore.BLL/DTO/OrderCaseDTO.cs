@@ -2,14 +2,14 @@
 
 namespace NLayerCasesStore.BLL.DTO
 {
-    public class BasketCaseDTO
+    public class OrderCaseDTO
     {
-        public int BasketId { get; set; }
-        public BasketDTO Basket { get; set; }
+        public int OrderId { get; set; }
+        public OrderDTO Order { get; set; }
 
         public int CaseId { get; set; }
         public CaseDTO Case { get; set; }
 
-        public int CountCasesInBasket { get; set; }
+        public int CountCasesInOrder { get; set; }
     }
 }
